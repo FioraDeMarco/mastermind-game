@@ -114,6 +114,7 @@ function Game() {
   }
 
   finalArray.push(Object.values(userGuess));
+  console.log("randomNumber", randomNumber);
   return (
     <div className='Game'>
       <>
