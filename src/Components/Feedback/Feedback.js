@@ -2,29 +2,29 @@ import React from "react";
 
 const Feedback = ({ ...feedback }) => {
   let feedbackArray = [...Object.values(feedback)];
-  let feedbackIndex = [...Object.keys(feedback)];
 
   return (
     <section>
-      <ul>
-        {feedbackArray.length > 1
+      <div>
+        {feedbackArray.length > 0
           ? feedbackArray.map((tip, i) => {
               <h1>Here is Your Feedback</h1>;
               if (i === 0) return;
+
               return (
                 <>
-                  <li key={`${i}`}>
+                  <br />
+                  <div key={`${i}`}>
                     <span>Feedback Turn#{`${i}`}</span>
-                  </li>
-
-                  <li key={`${tip}`}>
+                  </div>
+                  <div key={`${i}`}>
                     <span>{`${tip}`}</span>
-                  </li>
+                  </div>
                 </>
               );
             })
           : ""}
-      </ul>
+      </div>
     </section>
   );
 };
