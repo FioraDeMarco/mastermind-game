@@ -5,7 +5,7 @@ import Feedback from "../Components/Feedback/Feedback";
 import { WonGame } from "../Components/WonGame/WonGame";
 import "./Game.css";
 
-function Game() {
+function Game({ ...number }) {
   const [winner, setWinner] = useState(false);
   const [guessCount, setGuessCount] = useState(1);
   const [randomNumber, setRandomNumber] = useState([]);
@@ -19,6 +19,7 @@ function Game() {
   const [feedback, setFeedback] = useState([]);
   const [winOpen, setWinOpen] = useState(false);
   const [looseOpen, setLoseOpen] = useState(false);
+  number = Number(Object.values(number));
 
   const handleNewGame = (e) => {
     e.preventDefault();
@@ -26,11 +27,14 @@ function Game() {
     setWinOpen(false);
     setLoseOpen(false);
     setMessageOn(false);
-    let a = Math.floor(Math.random() * 8);
-    let b = Math.floor(Math.random() * 8);
-    let c = Math.floor(Math.random() * 8);
-    let d = Math.floor(Math.random() * 8);
-    const tempRandomNumber = [a, b, c, d];
+
+    let tempRandomNumber = [];
+    let index = number;
+    while (index > 0) {
+      tempRandomNumber.push(Math.floor(Math.random() * 8));
+      index--;
+    }
+
     setRandomNumber(tempRandomNumber);
     setInputValues({});
     setUserGuess({});
@@ -49,7 +53,7 @@ function Game() {
     setMessageOn(false);
   };
 
-  for (let i = 1; i <= 4; i++) {
+  for (let i = 1; i <= number; i++) {
     inputs.push(
       <input
         className={"inputs"}
@@ -88,7 +92,7 @@ function Game() {
         correctValue++;
       }
     }
-    if (correctLocation === 4 && correctValue === 4) {
+    if (correctLocation === number && correctValue === number) {
       setWin(true);
       setWinOpen(true);
     }
@@ -120,7 +124,6 @@ function Game() {
   }
 
   finalArray.push(Object.values(userGuess));
-  console.log("randomNumber", randomNumber);
   return (
     <div className='Game'>
       <>

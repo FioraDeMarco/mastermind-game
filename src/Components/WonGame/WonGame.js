@@ -8,7 +8,6 @@ export const WonGame = ({ closeWin, handleNewGame }) => {
       <Confetti />
       <div className='won'>
         <h1>{`YOU ARE THE MASTERMIND!`}</h1>
-        {/* <ReactConfetti /> */}
         <h3>All correct, You Win!</h3>
         <button id='new-game' onClick={handleNewGame}>
           New Game⏯
