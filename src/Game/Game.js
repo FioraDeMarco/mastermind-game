@@ -71,7 +71,6 @@ function Game() {
     setUserGuesses([...userGuesses, userGuess]);
     setUserGuesses([...userGuesses, userGuess]);
     setFeedback([...feedback, message]);
-    // setInputValues({});
 
     setGuessCount(guessCount + 1);
     let correctLocation = 0;
