@@ -1,30 +1,31 @@
 // “Do what you can, with what you have, where you are.” ―Theodore Roosevelt.
 import React, { useEffect, useState } from "react";
-import LostGame from "../Components/LostGame/LostGame";
+import { LostGame } from "../Components/LostGame/LostGame";
 import Feedback from "../Components/Feedback/Feedback";
 import { WonGame } from "../Components/WonGame/WonGame";
+import "./Game.css";
 
 function Game() {
   const [winner, setWinner] = useState(false);
   const [guessCount, setGuessCount] = useState(1);
   const [randomNumber, setRandomNumber] = useState([]);
   const [win, setWin] = useState(false);
-  const [randomNumberButton, setRandomNumberButton] = useState(true);
   const [inputValues, setInputValues] = useState({});
   const [userGuess, setUserGuess] = useState({});
   const [userGuesses, setUserGuesses] = useState([]);
   const [messageOn, setMessageOn] = useState(false);
   const [loser, setLoser] = useState(false);
-  const [winMessage, setWinMessage] = useState("");
   const [message, setMessage] = useState("");
   const [feedback, setFeedback] = useState([]);
   const [winOpen, setWinOpen] = useState(false);
-  const [looseOpen, setLooseOpen] = useState(false);
+  const [looseOpen, setLoseOpen] = useState(false);
 
   const handleNewGame = (e) => {
     e.preventDefault();
     setWin(false);
     setWinOpen(false);
+    setLoseOpen(false);
+    setMessageOn(false);
     let a = Math.floor(Math.random() * 8);
     let b = Math.floor(Math.random() * 8);
     let c = Math.floor(Math.random() * 8);
@@ -35,6 +36,7 @@ function Game() {
     setUserGuess({});
     setUserGuesses([]);
     setGuessCount(1);
+    setFeedback([]);
   };
   const inputs = [];
 
@@ -69,6 +71,7 @@ function Game() {
     setUserGuesses([...userGuesses, userGuess]);
     setUserGuesses([...userGuesses, userGuess]);
     setFeedback([...feedback, message]);
+    // setInputValues({});
 
     setGuessCount(guessCount + 1);
     let correctLocation = 0;
@@ -87,19 +90,23 @@ function Game() {
       }
     }
     if (correctLocation === 4 && correctValue === 4) {
-      setWinMessage("YOU ARE THE MASTERMIND!");
       setWin(true);
       setWinOpen(true);
     }
-    setMessage(
-      `You have ${correctValue} correct number${
-        correctValue !== 1 ? "s" : ""
-      } in ${correctLocation} correct location${
-        correctLocation !== 1 ? "s" : ""
-      } `
-    );
-    if (guessCount > 10) {
+    if (correctLocation === 0 && correctValue === 0) {
+      setMessage("All Incorrect");
+    } else {
+      setMessage(
+        `You have ${correctValue} correct number${
+          correctValue !== 1 ? "s" : ""
+        } in ${correctLocation} correct location${
+          correctLocation !== 1 ? "s" : ""
+        } `
+      );
+    }
+    if (guessCount > 9) {
       setLoser(true);
+      setLoseOpen(true);
     }
 
     setMessageOn(true);
@@ -119,60 +126,59 @@ function Game() {
     <div className='Game'>
       <>
         <div className='game-container-1'>
-          <section className='one'>
-            <h4>
-              {!winner && !win
-                ? `You Have ${11 - guessCount} Attempts Remaining!`
-                : ""}
-            </h4>
-          </section>
-
-          <div>
-            <div>
-              <button onClick={handleNewGame}>New Game⏯</button>
-            </div>
-            <div>
-              <section className='two'>
-                <form onSubmit={handleSubmit}>
-                  <div>
-                    <h4>{messageOn ? `${message}` : ""}</h4>
-                  </div>
-                  <div className='game-tile-inputs'>
-                    <label>
-                      <div className='smaller-container'>{inputs}</div>
-                      <button onClick={handleSubmit}>✅</button>
-                    </label>
-                  </div>
-                  {loser ? (
-                    <div>
-                      <LostGame />
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </form>
-              </section>
-            </div>
-
-            <div className='container'>
+          <div className='guess-count-and-inputs'>
+            <section className='big-two'>
               <section className='three'>
                 <div className='box-1'>
+                  <h4>
+                    {!winner && !win
+                      ? `You Have ${11 - guessCount} Attempts Remaining!`
+                      : ""}
+                  </h4>
+                </div>
+              </section>
+
+              <section className='four'>
+                <div>
+                  <div>
+                    <button onClick={handleNewGame}>New Game⏯</button>
+                  </div>
+                  <form onSubmit={handleSubmit}>
+                    <div>
+                      <h4>{messageOn ? `${message}` : ""}</h4>
+                    </div>
+                    <div className='game-tile-inputs'>
+                      <label>
+                        <div className='smaller-container'>{inputs}</div>
+                        <button onClick={handleSubmit}>✅</button>
+                      </label>
+                    </div>
+                  </form>
+                </div>
+              </section>
+            </section>
+          </div>
+
+          <div className='board-and-feedback'>
+            <section className='big-one'>
+              <h2>Previous Guesses</h2>
+              <section className='one'>
+                <div>
                   <div>
                     {finalArray.length > 1
                       ? finalArray.map((guess, i) => {
                           let num = i;
+
                           if (i === 0) return;
-                          <h1>Previous Guesses</h1>;
                           return (
                             <>
-                              <div key={`${i}`}>
-                                <p>Guess Turn #{num}</p>
-                              </div>
+                              <p>Turn #{num}</p>
+                              <div key={`${i}`}></div>
                               <div key={`${guess}`}>
-                                <p>{`${guess}`}</p>
+                                <div> Guess: {`${guess}`}</div>
                                 <div>
                                   {feedback[i]
-                                    ? `${feedback[i]}`
+                                    ? `Feedback: ${feedback[i]}`
                                     : `${message}`}
                                 </div>
                               </div>
@@ -183,16 +189,29 @@ function Game() {
                   </div>
                 </div>
               </section>
-            </div>
+              <section className='two'>
+                <div>ACTUAL BOARD CAN GO HERE</div>
+              </section>
+            </section>
           </div>
+
           {winOpen ? (
             <WonGame
               text='hello'
               closeWin={() => setWinOpen(false)}
               handleNewGame={handleNewGame}
             />
-          ) : null}
-          <section className='four'>ACTUAL BOARD CAN GO HERE</section>
+          ) : (
+            ""
+          )}
+          {looseOpen ? (
+            <LostGame
+              closeLose={() => setLoseOpen(false)}
+              handleNewGame={handleNewGame}
+            />
+          ) : (
+            ""
+          )}
         </div>
       </>
     </div>

@@ -1,6 +1,7 @@
 import "./App.css";
 import React, { useState } from "react";
 import Game from "./Game/Game";
+import "../src/Game/Game.css";
 
 function App() {
   const [isStarted, setIsStarted] = useState(false);
