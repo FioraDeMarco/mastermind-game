@@ -1,11 +1,17 @@
 import React from "react";
+import "./LostGame.css";
 
-const LostGame = () => {
+export const LostGame = ({ closeLose, handleNewGame }) => {
   return (
-    <section>
-      <div>We are the Mastermind Master!</div>
-    </section>
+    <div className='lose-container'>
+      <div className='lose'>
+        <h1>{`WE ARE THE MASTERMIND`}</h1>
+        <h3>Sorry! You Lose!</h3>
+        <button id='new-game' onClick={handleNewGame}>
+          New Game⏯
+        </button>
+        <button onClick={closeLose}>Close X</button>
+      </div>
+    </div>
   );
 };
-
-export default LostGame;

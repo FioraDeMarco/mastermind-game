@@ -1,0 +1,47 @@
+.game-container-1 {
+  background-color: #696969;
+  display: flex;
+  flex-direction: row;
+  min-height: 90vh;
+}
+.game-container-1 div {
+  border: 1px #ccc solid;
+  padding: 10px;
+}
+.big-one {
+  order: 1;
+  width: 100%;
+}
+.big-two {
+  order: 2;
+  width: 100%;
+}
+.guess-count-and-inputs {
+  width: 50%;
+  display: flex;
+  flex-direction: col;
+}
+.three {
+  order: 2;
+}
+.four {
+  order: 1;
+}
+
+.board-and-feedback {
+  display: flex;
+  flex-direction: col;
+  width: 50%;
+}
+.one {
+  order: 1;
+  overflow-y: scroll;
+  background: #aaa;
+  width: 100%;
+  height: 30vh;
+}
+.two {
+  order: 2;
+  flex: 2;
+  color: white;
+}
