@@ -4,7 +4,8 @@ import { LostGame } from "../Components/LostGame/LostGame";
 import Feedback from "../Components/Feedback/Feedback";
 import { WonGame } from "../Components/WonGame/WonGame";
 import "./Game.css";
-
+// Look up the sound of a wooden peg going into a slot and put it in
+// look up animations or toolkits
 function Game({ ...number }) {
   const [winner, setWinner] = useState(false);
   const [guessCount, setGuessCount] = useState(1);
@@ -124,6 +125,7 @@ function Game({ ...number }) {
   }
 
   finalArray.push(Object.values(userGuess));
+  console.log("randomNumber", randomNumber);
   return (
     <div className='Game'>
       <>

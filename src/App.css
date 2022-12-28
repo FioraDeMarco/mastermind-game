@@ -36,12 +36,6 @@
     transform: rotate(360deg);
   }
 } */
-.App {
-  background-color: #696969;
-  min-height: 100vh;
-  height: 100vh;
-  color: black;
-}
 
 /* .App-header {
   align-items: center;
@@ -83,4 +77,38 @@
   margin: 0;
   font: inherit;
   cursor: pointer;
+}
+
+.App-apple {
+  background-color: #696969;
+  min-height: 100vh;
+  height: 100vh;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.App {
+  background-color: #696969;
+}
+.right-side-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.learn {
+  order: 2;
+  /* display: flex;
+  flex-direction: col; */
+  min-height: 100vh;
+  min-width: 50vw;
+  flex: 4;
+}
+#img {
+  min-height: 50vh;
+  min-width: 20vw;
+}
+.start {
+  order: 1;
 }
