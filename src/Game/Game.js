@@ -4,6 +4,9 @@ import { LostGame } from "../Components/LostGame/LostGame";
 import Feedback from "../Components/Feedback/Feedback";
 import { WonGame } from "../Components/WonGame/WonGame";
 import "./Game.css";
+import { DraggableNumber } from "../Components/Draggable/DraggableNumber";
+import DroppableBox from "../Components/Droppable/DroppableBox";
+import { DragDropContext } from "react-beautiful-dnd";
 // Look up the sound of a wooden peg going into a slot and put it in
 // look up animations or toolkits
 function Game({ ...number }) {
@@ -22,6 +25,12 @@ function Game({ ...number }) {
   const [looseOpen, setLoseOpen] = useState(false);
   number = Number(Object.values(number));
 
+  const onDragEnd = () => {
+    console.log("HELLO");
+  };
+
+  // useEffect
+
   const handleNewGame = (e) => {
     e.preventDefault();
     setWin(false);
@@ -35,6 +44,10 @@ function Game({ ...number }) {
       tempRandomNumber.push(Math.floor(Math.random() * 8));
       index--;
     }
+    // for (let i = 0; i < tempRandomNumber; i++) {
+    //   apple[tempRandomNumber] =
+    // }
+    // const apple = {}
 
     setRandomNumber(tempRandomNumber);
     setInputValues({});
@@ -47,25 +60,28 @@ function Game({ ...number }) {
 
   const handleChange = (e) => {
     const value = e.target.value;
+    // if () set error message in state default null
+    let validInputs = "01234567";
+    if (!validInputs.includes(value)) {
+      window.alert("You must enter an integer between 0 and 7");
+    }
     setInputValues({
       ...inputValues,
       [e.target.name]: value,
     });
     setMessageOn(false);
   };
-
+  // make validation for numbers in handle change with alerts
   for (let i = 1; i <= number; i++) {
     inputs.push(
       <input
-        className={"inputs"}
-        min={0}
-        max={7}
         type='text'
         maxLength={1}
         value={inputValues[i]}
         key={`${i}`}
         name={`${i}`}
         onChange={handleChange}
+        required
       />
     );
   }
@@ -126,6 +142,8 @@ function Game({ ...number }) {
 
   finalArray.push(Object.values(userGuess));
   console.log("randomNumber", randomNumber);
+  console.log("userGuesses", userGuesses);
+  console.log("inputValues", inputValues);
   return (
     <div className='Game'>
       <>
@@ -145,7 +163,7 @@ function Game({ ...number }) {
               <section className='four'>
                 <div>
                   <div>
-                    <button onClick={handleNewGame}>New Game⏯</button>
+                    <button onClick={handleNewGame}>New Game ⏯</button>
                   </div>
                   <form onSubmit={handleSubmit}>
                     <div>
@@ -154,6 +172,11 @@ function Game({ ...number }) {
                     <div className='game-tile-inputs'>
                       <label>
                         <div className='smaller-container'>{inputs}</div>
+                        <DragDropContext onDragEnd={onDragEnd}>
+                          <div>hello world</div>
+                          <DroppableBox />
+                        </DragDropContext>
+
                         <button onClick={handleSubmit}>✅</button>
                       </label>
                     </div>
