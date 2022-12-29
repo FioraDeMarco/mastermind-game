@@ -4,8 +4,12 @@ import { LostGame } from "../Components/LostGame/LostGame";
 import Feedback from "../Components/Feedback/Feedback";
 import { WonGame } from "../Components/WonGame/WonGame";
 import "./Game.css";
-
-function Game() {
+import { DraggableNumber } from "../Components/Draggable/DraggableNumber";
+import DroppableBox from "../Components/Droppable/DroppableBox";
+import { DragDropContext } from "react-beautiful-dnd";
+// Look up the sound of a wooden peg going into a slot and put it in
+// look up animations or toolkits
+function Game({ ...number }) {
   const [winner, setWinner] = useState(false);
   const [guessCount, setGuessCount] = useState(1);
   const [randomNumber, setRandomNumber] = useState([]);
@@ -19,6 +23,7 @@ function Game() {
   const [feedback, setFeedback] = useState([]);
   const [winOpen, setWinOpen] = useState(false);
   const [looseOpen, setLoseOpen] = useState(false);
+  number = Number(Object.values(number));
 
   const handleNewGame = (e) => {
     e.preventDefault();
@@ -26,11 +31,14 @@ function Game() {
     setWinOpen(false);
     setLoseOpen(false);
     setMessageOn(false);
-    let a = Math.floor(Math.random() * 8);
-    let b = Math.floor(Math.random() * 8);
-    let c = Math.floor(Math.random() * 8);
-    let d = Math.floor(Math.random() * 8);
-    const tempRandomNumber = [a, b, c, d];
+
+    let tempRandomNumber = [];
+    let index = number;
+    while (index > 0) {
+      tempRandomNumber.push(Math.floor(Math.random() * 8));
+      index--;
+    }
+
     setRandomNumber(tempRandomNumber);
     setInputValues({});
     setUserGuess({});
@@ -42,6 +50,11 @@ function Game() {
 
   const handleChange = (e) => {
     const value = e.target.value;
+
+    let validInputs = "01234567";
+    if (!validInputs.includes(value)) {
+      window.alert("You must enter an integer between 0 and 7");
+    }
     setInputValues({
       ...inputValues,
       [e.target.name]: value,
@@ -49,18 +62,16 @@ function Game() {
     setMessageOn(false);
   };
 
-  for (let i = 1; i <= 4; i++) {
+  for (let i = 1; i <= number; i++) {
     inputs.push(
       <input
-        className={"inputs"}
-        min={0}
-        max={7}
         type='text'
         maxLength={1}
         value={inputValues[i]}
         key={`${i}`}
         name={`${i}`}
         onChange={handleChange}
+        required
       />
     );
   }
@@ -88,7 +99,7 @@ function Game() {
         correctValue++;
       }
     }
-    if (correctLocation === 4 && correctValue === 4) {
+    if (correctLocation === number && correctValue === number) {
       setWin(true);
       setWinOpen(true);
     }
@@ -118,9 +129,14 @@ function Game() {
     let obj = guessArray[i];
     finalArray.push(Object.values(obj));
   }
-
   finalArray.push(Object.values(userGuess));
+
+  const onDragEnd = () => {
+    console.log("HELLO");
+  };
+
   console.log("randomNumber", randomNumber);
+
   return (
     <div className='Game'>
       <>
@@ -140,7 +156,7 @@ function Game() {
               <section className='four'>
                 <div>
                   <div>
-                    <button onClick={handleNewGame}>New Game⏯</button>
+                    <button onClick={handleNewGame}>New Game ⏯ </button>
                   </div>
                   <form onSubmit={handleSubmit}>
                     <div>
@@ -149,6 +165,11 @@ function Game() {
                     <div className='game-tile-inputs'>
                       <label>
                         <div className='smaller-container'>{inputs}</div>
+                        <DragDropContext onDragEnd={onDragEnd}>
+                          <div>hello world</div>
+                          <DroppableBox />
+                        </DragDropContext>
+
                         <button onClick={handleSubmit}>✅</button>
                       </label>
                     </div>
