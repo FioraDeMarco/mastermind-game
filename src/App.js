@@ -1,6 +1,7 @@
 import "./App.css";
 import React, { useState } from "react";
 import Game from "./Game/Game";
+// import "../src/Game/Game.css";
 
 function App() {
   const [isStarted, setIsStarted] = useState(false);
@@ -19,6 +20,7 @@ function App() {
   };
   const handleMedium = () => {
     setShowDifficulties(false);
+    setNumber(5);
   };
   const handleEasy = () => {
     setShowDifficulties(false);
@@ -35,6 +37,8 @@ function App() {
         <Game number={number} />
       ) : (
         <>
+          {/* <div className='right-side-container'>
+            <section className='learn'> */}
           <div className='display'>
             <section className='learn'>
               Learn More About Mastermind Images
@@ -44,34 +48,60 @@ function App() {
                 height='150'
                 width='130'
               />
-              <section className='start'>
-                <div className='dropdown'>
-                  <button id='difficulties-button' onClick={handleDifficulties}>
-                    Difficulty
-                  </button>
-                  {showDifficulties ? (
-                    <ul className='levels'>
-                      <li className='hard'>
-                        <button onClick={handleHard}>Hard</button>
-                      </li>
-                      <li className='medium'>
-                        <button onClick={handleMedium}>Medium</button>
-                      </li>
-                      <li className='easy'>
-                        <button onClick={handleEasy}>Easy</button>
-                      </li>
-                    </ul>
-                  ) : (
-                    ""
-                  )}
-                  {showDifficulties ? <di></di> : <div></div>}
-                </div>
-                <button id='play-game' onClick={handleStartGame}>
-                  Play!
-                </button>
-              </section>
             </section>
+            {/* <section className='start'>
+              <div className='dropdown'>
+                <button id='difficulties-button' onClick={handleDifficulties}>
+                  Difficulty
+                </button>
+                {showDifficulties ? (
+                  <ul className='levels'>
+                    <li className='hard'>
+                      <button onClick={handleHard}>Hard</button>
+                    </li>
+                    <li className='medium'>
+                      <button onClick={handleMedium}>Medium</button>
+                    </li>
+                    <li className='easy'>
+                      <button onClick={handleEasy}>Easy</button>
+                    </li>
+                  </ul>
+                ) : (
+                  ""
+                )}
+                {showDifficulties ? <di></di> : <div></div>}
+              </div>
+              <button id='play-game' onClick={handleStartGame}>
+                Start Game!
+              </button>
+            </section> */}
           </div>
+          <section className='start'>
+            <div className='dropdown'>
+              <button id='difficulties-button' onClick={handleDifficulties}>
+                Difficulty
+              </button>
+              {showDifficulties ? (
+                <ul className='levels'>
+                  <li className='hard'>
+                    <button onClick={handleHard}>Hard</button>
+                  </li>
+                  <li className='medium'>
+                    <button onClick={handleMedium}>Medium</button>
+                  </li>
+                  <li className='easy'>
+                    <button onClick={handleEasy}>Easy</button>
+                  </li>
+                </ul>
+              ) : (
+                ""
+              )}
+              {showDifficulties ? <di></di> : <div></div>}
+            </div>
+            <button id='play-game' onClick={handleStartGame}>
+              Start Game!
+            </button>
+          </section>
         </>
       )}
       {/* </div> */}

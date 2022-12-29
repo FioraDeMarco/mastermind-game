@@ -25,6 +25,12 @@ function Game({ ...number }) {
   const [looseOpen, setLoseOpen] = useState(false);
   number = Number(Object.values(number));
 
+  const onDragEnd = () => {
+    console.log("HELLO");
+  };
+
+  // useEffect
+
   const handleNewGame = (e) => {
     e.preventDefault();
     setWin(false);
@@ -38,6 +44,10 @@ function Game({ ...number }) {
       tempRandomNumber.push(Math.floor(Math.random() * 8));
       index--;
     }
+    // for (let i = 0; i < tempRandomNumber; i++) {
+    //   apple[tempRandomNumber] =
+    // }
+    // const apple = {}
 
     setRandomNumber(tempRandomNumber);
     setInputValues({});
@@ -50,7 +60,7 @@ function Game({ ...number }) {
 
   const handleChange = (e) => {
     const value = e.target.value;
-
+    // if () set error message in state default null
     let validInputs = "01234567";
     if (!validInputs.includes(value)) {
       window.alert("You must enter an integer between 0 and 7");
@@ -61,7 +71,7 @@ function Game({ ...number }) {
     });
     setMessageOn(false);
   };
-
+  // make validation for numbers in handle change with alerts
   for (let i = 1; i <= number; i++) {
     inputs.push(
       <input
@@ -129,12 +139,11 @@ function Game({ ...number }) {
     let obj = guessArray[i];
     finalArray.push(Object.values(obj));
   }
+
   finalArray.push(Object.values(userGuess));
-
-  const onDragEnd = () => {
-    console.log("HELLO");
-  };
-
+  console.log("randomNumber", randomNumber);
+  console.log("userGuesses", userGuesses);
+  console.log("inputValues", inputValues);
   return (
     <div className='Game'>
       <>

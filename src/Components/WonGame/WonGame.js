@@ -10,7 +10,7 @@ export const WonGame = ({ closeWin, handleNewGame }) => {
         <h1>{`YOU ARE THE MASTERMIND!`}</h1>
         <h3>All correct, You Win!</h3>
         <button id='new-game' onClick={handleNewGame}>
-          Play Again! ⏯
+          New Game⏯
         </button>
         <button onClick={closeWin}>Close X</button>
       </div>
