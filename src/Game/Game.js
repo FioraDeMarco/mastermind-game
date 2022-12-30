@@ -7,8 +7,13 @@ import "./Game.css";
 import { DraggableNumber } from "../Components/Draggable/DraggableNumber";
 import DroppableBox from "../Components/Droppable/DroppableBox";
 import { DragDropContext } from "react-beautiful-dnd";
+import Toastify, { NAN } from "../Components/Toastify";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 // Look up the sound of a wooden peg going into a slot and put it in
 // look up animations or toolkits
+// I guess it's harder to maintain code if it uses both styled components and regular css, so you might want to do something about that.
 function Game({ ...number }) {
   const [winner, setWinner] = useState(false);
   const [guessCount, setGuessCount] = useState(1);
@@ -22,8 +27,15 @@ function Game({ ...number }) {
   const [message, setMessage] = useState("");
   const [feedback, setFeedback] = useState([]);
   const [winOpen, setWinOpen] = useState(false);
-  const [looseOpen, setLoseOpen] = useState(false);
+  const [loseOpen, setLoseOpen] = useState(false);
   number = Number(Object.values(number));
+  const [isValid, setIsValid] = useState(true);
+  // const [isNewGame, setIsNewGame] = useState(false);
+
+  // useEffect(() => {
+  //   if (isNewGame) {
+  //   }
+  // }, [isNewGame]);
 
   const handleNewGame = (e) => {
     e.preventDefault();
@@ -53,7 +65,10 @@ function Game({ ...number }) {
 
     let validInputs = "01234567";
     if (!validInputs.includes(value)) {
-      window.alert("You must enter an integer between 0 and 7");
+      // window.alert("You must enter an integer between 0 and 7");
+      NAN();
+    }
+    if (userGuesses.includes(value)) {
     }
     setInputValues({
       ...inputValues,
@@ -71,13 +86,17 @@ function Game({ ...number }) {
         key={`${i}`}
         name={`${i}`}
         onChange={handleChange}
-        required
+        rules={[{ required: true, message: "You must enter 4 numbers" }]}
       />
     );
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // if (Object.values(inputValues).every(x => x === null)) {
+
+    //   toast;
+    // }
     setUserGuess({ ...inputValues });
     setUserGuesses([...userGuesses, userGuess]);
     setUserGuesses([...userGuesses, userGuess]);
@@ -140,6 +159,7 @@ function Game({ ...number }) {
   return (
     <div className='Game'>
       <>
+        <Toastify />
         <div className='game-container-1'>
           <div className='guess-count-and-inputs'>
             <section className='big-two'>
@@ -157,8 +177,12 @@ function Game({ ...number }) {
                 <div>
                   <div>
                     <button onClick={handleNewGame}>New Game ⏯ </button>
+                    {/* <button onClick={() => setIsNewGame(!isNewGame)}>
+                      New Game ⏯{" "}
+                    </button> */}
                   </div>
-                  <form onSubmit={handleSubmit}>
+                  {/* <form onSubmit={handleSubmit} disabled={!isValid}> */}
+                  <form onSubmit={handleSubmit} disabled={!isValid}>
                     <div>
                       <h4>{messageOn ? `${message}` : ""}</h4>
                     </div>
@@ -220,14 +244,18 @@ function Game({ ...number }) {
               text='hello'
               closeWin={() => setWinOpen(false)}
               handleNewGame={handleNewGame}
+              // isNewGame={!isNewGame}
+              // isNewGame={()=>setIsNewGame(!isNewGame)}
             />
           ) : (
             ""
           )}
-          {looseOpen ? (
+          {loseOpen ? (
             <LostGame
               closeLose={() => setLoseOpen(false)}
               handleNewGame={handleNewGame}
+              // isNewGame={!isNewGame}
+              // isNewGame={()=>setIsNewGame(!isNewGame)}
             />
           ) : (
             ""

@@ -1,6 +1,7 @@
 import "./App.css";
 import React, { useState } from "react";
 import Game from "./Game/Game";
+// import Toastify from "./Components/Toastify";
 
 function App() {
   const [isStarted, setIsStarted] = useState(false);
@@ -29,6 +30,7 @@ function App() {
   return (
     <div className='all'>
       {/* <div className='App-apple'> */}
+
       <header className='App-header'>
         <h1>Mastermind Game</h1>
       </header>

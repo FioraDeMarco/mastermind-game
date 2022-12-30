@@ -28,6 +28,7 @@ input {
   font-size: large;
   margin-bottom: 1rem;
   margin-right: 1rem;
+  text-align: center;
 }
 
 .levels > li > button {
@@ -50,7 +51,7 @@ input {
   color: black;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .all {
@@ -60,7 +61,7 @@ input {
   background-size: 100%;
   /* background-size: 1920px 1200px; */
   /* background-size: 2290px 900px; */
-  /* min-height: 900px; */
+  /* min-height: 1900px; */
 }
 .right-side-container {
   display: flex;
