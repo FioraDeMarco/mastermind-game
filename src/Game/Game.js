@@ -4,9 +4,9 @@ import { LostGame } from "../Components/LostGame/LostGame";
 import Feedback from "../Components/Feedback/Feedback";
 import { WonGame } from "../Components/WonGame/WonGame";
 import "./Game.css";
-import { DraggableNumber } from "../Components/Draggable/DraggableNumber";
-import DroppableBox from "../Components/Droppable/DroppableBox";
-import { DragDropContext } from "react-beautiful-dnd";
+// import { DraggableNumber } from "../Components/Draggable/DraggableNumber";
+// import DroppableBox from "../Components/Droppable/DroppableBox";
+// import { DragDropContext } from "react-beautiful-dnd";
 import Toastify, { NAN } from "../Components/Toastify";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -62,14 +62,12 @@ function Game({ ...number }) {
 
   const handleChange = (e) => {
     const value = e.target.value;
-
     let validInputs = "01234567";
     if (!validInputs.includes(value)) {
-      // window.alert("You must enter an integer between 0 and 7");
       NAN();
     }
-    if (userGuesses.includes(value)) {
-    }
+    // if (userGuesses.includes(value)) {
+    // }
     setInputValues({
       ...inputValues,
       [e.target.name]: value,
@@ -150,9 +148,9 @@ function Game({ ...number }) {
   }
   finalArray.push(Object.values(userGuess));
 
-  const onDragEnd = () => {
-    console.log("HELLO");
-  };
+  // const handleDragEnd = () => {
+  //   console.log("HELLO");
+  // };
 
   console.log("randomNumber", randomNumber);
 
@@ -189,10 +187,10 @@ function Game({ ...number }) {
                     <div className='game-tile-inputs'>
                       <label>
                         <div className='smaller-container'>{inputs}</div>
-                        <DragDropContext onDragEnd={onDragEnd}>
+                        {/* <DragDropContext onDragEnd={onDragEnd}>
                           <div>hello world</div>
                           <DroppableBox />
-                        </DragDropContext>
+                        </DragDropContext> */}
 
                         <button onClick={handleSubmit}>✅</button>
                       </label>
