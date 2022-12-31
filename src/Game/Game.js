@@ -1,14 +1,12 @@
-// “Do what you can, with what you have, where you are.” ―Theodore Roosevelt.
 import React, { useEffect, useState } from "react";
 import { LostGame } from "../Components/LostGame/LostGame";
 import Feedback from "../Components/Feedback/Feedback";
 import { WonGame } from "../Components/WonGame/WonGame";
 import "./Game.css";
-import { DraggableNumber } from "../Components/Draggable/DraggableNumber";
-import DroppableBox from "../Components/Droppable/DroppableBox";
-import { DragDropContext } from "react-beautiful-dnd";
-// Look up the sound of a wooden peg going into a slot and put it in
-// look up animations or toolkits
+import Toastify, { NAN } from "../Components/Toastify";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function Game({ ...number }) {
   const [winner, setWinner] = useState(false);
   const [guessCount, setGuessCount] = useState(1);
@@ -22,8 +20,9 @@ function Game({ ...number }) {
   const [message, setMessage] = useState("");
   const [feedback, setFeedback] = useState([]);
   const [winOpen, setWinOpen] = useState(false);
-  const [looseOpen, setLoseOpen] = useState(false);
+  const [loseOpen, setLoseOpen] = useState(false);
   number = Number(Object.values(number));
+  const [isValid, setIsValid] = useState(true);
 
   const handleNewGame = (e) => {
     e.preventDefault();
@@ -50,11 +49,11 @@ function Game({ ...number }) {
 
   const handleChange = (e) => {
     const value = e.target.value;
-
     let validInputs = "01234567";
     if (!validInputs.includes(value)) {
-      window.alert("You must enter an integer between 0 and 7");
+      NAN();
     }
+
     setInputValues({
       ...inputValues,
       [e.target.name]: value,
@@ -71,7 +70,7 @@ function Game({ ...number }) {
         key={`${i}`}
         name={`${i}`}
         onChange={handleChange}
-        required
+        rules={[{ required: true, message: "You must enter 4 numbers" }]}
       />
     );
   }
@@ -131,15 +130,10 @@ function Game({ ...number }) {
   }
   finalArray.push(Object.values(userGuess));
 
-  const onDragEnd = () => {
-    console.log("HELLO");
-  };
-
-  console.log("randomNumber", randomNumber);
-
   return (
     <div className='Game'>
       <>
+        <Toastify />
         <div className='game-container-1'>
           <div className='guess-count-and-inputs'>
             <section className='big-two'>
@@ -158,17 +152,14 @@ function Game({ ...number }) {
                   <div>
                     <button onClick={handleNewGame}>New Game ⏯ </button>
                   </div>
-                  <form onSubmit={handleSubmit}>
+
+                  <form onSubmit={handleSubmit} disabled={!isValid}>
                     <div>
                       <h4>{messageOn ? `${message}` : ""}</h4>
                     </div>
                     <div className='game-tile-inputs'>
                       <label>
                         <div className='smaller-container'>{inputs}</div>
-                        <DragDropContext onDragEnd={onDragEnd}>
-                          <div>hello world</div>
-                          <DroppableBox />
-                        </DragDropContext>
 
                         <button onClick={handleSubmit}>✅</button>
                       </label>
@@ -224,7 +215,7 @@ function Game({ ...number }) {
           ) : (
             ""
           )}
-          {looseOpen ? (
+          {loseOpen ? (
             <LostGame
               closeLose={() => setLoseOpen(false)}
               handleNewGame={handleNewGame}
