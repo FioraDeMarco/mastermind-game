@@ -1,19 +1,12 @@
-// “Do what you can, with what you have, where you are.” ―Theodore Roosevelt.
 import React, { useEffect, useState } from "react";
 import { LostGame } from "../Components/LostGame/LostGame";
 import Feedback from "../Components/Feedback/Feedback";
 import { WonGame } from "../Components/WonGame/WonGame";
 import "./Game.css";
-// import { DraggableNumber } from "../Components/Draggable/DraggableNumber";
-// import DroppableBox from "../Components/Droppable/DroppableBox";
-// import { DragDropContext } from "react-beautiful-dnd";
 import Toastify, { NAN } from "../Components/Toastify";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// Look up the sound of a wooden peg going into a slot and put it in
-// look up animations or toolkits
-// I guess it's harder to maintain code if it uses both styled components and regular css, so you might want to do something about that.
 function Game({ ...number }) {
   const [winner, setWinner] = useState(false);
   const [guessCount, setGuessCount] = useState(1);
@@ -30,12 +23,6 @@ function Game({ ...number }) {
   const [loseOpen, setLoseOpen] = useState(false);
   number = Number(Object.values(number));
   const [isValid, setIsValid] = useState(true);
-  // const [isNewGame, setIsNewGame] = useState(false);
-
-  // useEffect(() => {
-  //   if (isNewGame) {
-  //   }
-  // }, [isNewGame]);
 
   const handleNewGame = (e) => {
     e.preventDefault();
@@ -66,8 +53,7 @@ function Game({ ...number }) {
     if (!validInputs.includes(value)) {
       NAN();
     }
-    // if (userGuesses.includes(value)) {
-    // }
+
     setInputValues({
       ...inputValues,
       [e.target.name]: value,
@@ -91,10 +77,6 @@ function Game({ ...number }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // if (Object.values(inputValues).every(x => x === null)) {
-
-    //   toast;
-    // }
     setUserGuess({ ...inputValues });
     setUserGuesses([...userGuesses, userGuess]);
     setUserGuesses([...userGuesses, userGuess]);
@@ -148,12 +130,6 @@ function Game({ ...number }) {
   }
   finalArray.push(Object.values(userGuess));
 
-  // const handleDragEnd = () => {
-  //   console.log("HELLO");
-  // };
-
-  console.log("randomNumber", randomNumber);
-
   return (
     <div className='Game'>
       <>
@@ -175,11 +151,8 @@ function Game({ ...number }) {
                 <div>
                   <div>
                     <button onClick={handleNewGame}>New Game ⏯ </button>
-                    {/* <button onClick={() => setIsNewGame(!isNewGame)}>
-                      New Game ⏯{" "}
-                    </button> */}
                   </div>
-                  {/* <form onSubmit={handleSubmit} disabled={!isValid}> */}
+
                   <form onSubmit={handleSubmit} disabled={!isValid}>
                     <div>
                       <h4>{messageOn ? `${message}` : ""}</h4>
@@ -187,10 +160,6 @@ function Game({ ...number }) {
                     <div className='game-tile-inputs'>
                       <label>
                         <div className='smaller-container'>{inputs}</div>
-                        {/* <DragDropContext onDragEnd={onDragEnd}>
-                          <div>hello world</div>
-                          <DroppableBox />
-                        </DragDropContext> */}
 
                         <button onClick={handleSubmit}>✅</button>
                       </label>
@@ -242,8 +211,6 @@ function Game({ ...number }) {
               text='hello'
               closeWin={() => setWinOpen(false)}
               handleNewGame={handleNewGame}
-              // isNewGame={!isNewGame}
-              // isNewGame={()=>setIsNewGame(!isNewGame)}
             />
           ) : (
             ""
@@ -252,8 +219,6 @@ function Game({ ...number }) {
             <LostGame
               closeLose={() => setLoseOpen(false)}
               handleNewGame={handleNewGame}
-              // isNewGame={!isNewGame}
-              // isNewGame={()=>setIsNewGame(!isNewGame)}
             />
           ) : (
             ""
