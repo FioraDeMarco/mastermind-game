@@ -28,6 +28,8 @@ function App() {
 
   return (
     <div className='all'>
+      {/* <div className='App-apple'> */}
+
       <header className='App-header'>
         <h1>Mastermind Game</h1>
       </header>
@@ -73,6 +75,7 @@ function App() {
           </div>
         </>
       )}
+      {/* </div> */}
     </div>
   );
 }

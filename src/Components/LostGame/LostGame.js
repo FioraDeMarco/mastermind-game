@@ -10,7 +10,7 @@ export const LostGame = ({ closeLose, handleNewGame }) => {
         <button id='new-game' onClick={handleNewGame}>
           New Game⏯
         </button>
-        <button onClick={closeLose}>Close X</button>
+        {/* <button onClick={closeLose}>Close X</button> */}
       </div>
     </div>
   );
