@@ -13,7 +13,7 @@ import Item from "../Components/DraggableDroppable/Item";
 
 function Game({ ...number }) {
   const [winner, setWinner] = useState(false);
-  const [guessCount, setGuessCount] = useState(0);
+  const [guessCount, setGuessCount] = useState(1);
   const [randomNumber, setRandomNumber] = useState([]);
   const [win, setWin] = useState(false);
   const [inputValues, setInputValues] = useState({});
@@ -71,62 +71,31 @@ function Game({ ...number }) {
 
     setRandomNumber(tempRandomNumber);
     setRandomFruit(tempFruit);
-    // setInputValues({});]
-    // setDroppedItems([])
+    setDroppedItems([]);
     setUserGuess([]);
-    // setUserGuesses([]);
-    setGuessCount(0);
+    setGuessCount(1);
     setFeedback([]);
   };
-  const inputs = [];
-
-  //   const handleChange = (e) => {
-  //     const value = e.target.value;
-  //     let validInputs = "01234567";
-  //     if (!validInputs.includes(value)) {
-  //       NAN();
-  //     }
-
-  //     setInputValues({
-  //       ...inputValues,
-  //       [e.target.name]: value,
-  //     });
-  //     setMessageOn(false);
-  //   };
-
-  //   for (let i = 1; i <= number; i++) {
-  //     inputs.push(
-  //       <input
-  //         type='text'
-  //         maxLength={1}
-  //         value={inputValues[i]}
-  //         key={`${i}`}
-  //         name={`${i}`}
-  //         onChange={handleChange}
-  //         rules={[{ required: true, message: "You must enter 4 numbers" }]}
-  //       />
-  //     );
-  //   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setUserGuess([...droppedItems]);
     setUserGuesses([...userGuesses, droppedItems]);
     console.log("userGuesses in submit", userGuesses);
-    setDroppedItems([]);
-    setUserGuess([]);
+
     setGuessCount(guessCount + 1);
     let correctLocation = 0;
     let correctValue = 0;
-    let attemptStr = Object.values(inputValues).join("");
-    let randomNumberStr = randomNumber.join("");
-    for (let i = 0; i < randomNumberStr.length; i++) {
-      if (attemptStr[i] === randomNumberStr[i]) {
+    // let attemptStr = Object.values(inputValues).join("");
+    // let randomNumberStr = randomNumber.join("");
+    for (let i = 0; i < randomFruit.length; i++) {
+      console.log("userGuess[i]", userGuess[i]);
+      if (droppedItems[i] === randomFruit[i]) {
         correctLocation++;
       }
       if (
-        randomNumberStr.includes(attemptStr[i]) &&
-        attemptStr.includes(randomNumberStr[i])
+        randomFruit.includes(droppedItems[i]) &&
+        droppedItems.includes(randomFruit[i])
       ) {
         correctValue++;
       }
@@ -150,6 +119,8 @@ function Game({ ...number }) {
       setLoser(true);
       setLoseOpen(true);
     }
+    setDroppedItems([]);
+    setUserGuess([]);
 
     setMessageOn(true);
     return { correctValue, correctLocation };
@@ -183,7 +154,7 @@ function Game({ ...number }) {
                 ))}
               </div>
 
-              <MultipleDroppable className='drop zone'>
+              <MultipleDroppable className='drop zone' number={number}>
                 {droppedItems.map((item, index) => (
                   <Item key={index}>{item}</Item>
                 ))}
@@ -201,7 +172,7 @@ function Game({ ...number }) {
                 <div className='box-1'>
                   <h4>
                     {!winner && !win
-                      ? `You Have ${10 - guessCount} Attempts Remaining!`
+                      ? `You Have ${11 - guessCount} Attempts Remaining!`
                       : ""}
                   </h4>
                 </div>
