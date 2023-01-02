@@ -1,5 +1,3 @@
-// “Do what you can, with what you have, where you are.” ―Theodore Roosevelt.
-// @dnd-kit/utilities      @dnd-kit/sortable
 import React, { useEffect, useState } from "react";
 import { LostGame } from "../Components/LostGame/LostGame";
 import Feedback from "../Components/Feedback/Feedback";
@@ -48,10 +46,6 @@ function Game({ fruitMode, classicMode, ...number }) {
     { 7: "🥝" },
   ];
 
-  //   useEffect(() => {
-  //     handleNewGame();
-  //   }, []);
-
   if (classicMode) {
     return <Game1 number={number} />;
   }
@@ -69,7 +63,7 @@ function Game({ fruitMode, classicMode, ...number }) {
     let index = number;
     while (index > 0) {
       let num = Math.floor(Math.random() * 8);
-      //   tempRandomNumber.push(Math.floor(Math.random() * 8));
+
       tempRandomNumber.push(num);
 
       tempFruit.push(Object.values(fruitsNumbers[num]).toString());
@@ -86,8 +80,6 @@ function Game({ fruitMode, classicMode, ...number }) {
     setFeedback([]);
   };
 
-  // This game has ended you, you must press new game to play again
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setUserGuess([...droppedItems]);
@@ -98,15 +90,6 @@ function Game({ fruitMode, classicMode, ...number }) {
     setGuessCount(guessCount + 1);
     let correctLocation = 0;
     let correctValue = 0;
-
-    // for (let i = 0; i < randomFruit.length; i++) {
-    //   if (droppedItems[i] === randomFruit[i]) {
-    //     correctLocation++;
-    //     correctValue++;
-    //   } else if (randomFruit.includes(droppedItems[i])) {
-    //     correctValue++;
-    //   }
-    // }
 
     let randomFruitCopy = randomFruit.slice();
     let droppedItemsCopy = droppedItems.slice();
@@ -127,15 +110,6 @@ function Game({ fruitMode, classicMode, ...number }) {
         randomFruitCopy[foundIdx] = null;
       }
     });
-
-    // for (let i = 0; i < randomFruit.length; i++) {
-    //   console.log("userGuess[i]", userGuess[i]);
-    //   if (droppedItems[i] === randomFruit[i]) {
-    //     correctLocation++;
-    //   } else if (randomFruit.includes(droppedItems[i])) {
-    //     correctValue++;
-    //   }
-    // }
 
     if (correctLocation === number && correctValue === number) {
       setWin(true);
@@ -164,7 +138,7 @@ function Game({ fruitMode, classicMode, ...number }) {
     setUserGuess([]);
 
     setMessageOn(true);
-    // return { correctValue, correctLocation };
+    return { correctValue, correctLocation };
   };
 
   let guessArray = Object.values(userGuesses);
@@ -210,7 +184,6 @@ function Game({ fruitMode, classicMode, ...number }) {
               </DragOverlay>
             </DndContext>
             <section className='four'>
-              {/* <section className='three'> */}
               <section>
                 <div className='box-1'>
                   <h4>
@@ -233,8 +206,6 @@ function Game({ fruitMode, classicMode, ...number }) {
                   </div>
                   <div className='game-tile-inputs'>
                     <label>
-                      {/* <div className='smaller-container'>{inputs}</div> */}
-
                       <button onClick={handleSubmit}>✅</button>
                     </label>
                     <button onClick={() => setDroppedItems([])}>
@@ -252,7 +223,6 @@ function Game({ fruitMode, classicMode, ...number }) {
               <section className='one'>
                 {feedback.length
                   ? userGuesses.map((guess, i) => {
-                      // let fruit = userGuesses[i]
                       let num = i + 1;
 
                       return (
@@ -311,29 +281,11 @@ function Game({ fruitMode, classicMode, ...number }) {
     console.log("active", active, "over", over, "event", event);
 
     let isOver = event.over.id.toString().includes("droppable");
-    console.log(" IT IS OVER A CONTAINER ", isOver);
+
     if (over && isOver) {
-      // console.log("active", active);
-      // console.log("active data", active.data);
-      // console.log("current", active.data.current);
-      // console.log("active data current id", active.data.current.id);
-      // Append to the list of dropped items
-      //
-
       const newItem = items[active.data.current.id];
-      console.log("active.data.current", active.data.current);
-      setDroppedItems([...droppedItems, newItem]);
-      //   setInputValues({ ...inputValues, newItem });
-      //   setUserGuess([...droppedItems]);
-      console.log(
-        "items[active.data.current.id]",
-        items[active.data.current.id]
-      );
 
-      console.log("inputValues", inputValues);
-      // console.log("inputValues", inputValues);
-      console.log("userGuess", userGuess);
-      console.log("userGuesses", userGuesses);
+      setDroppedItems([...droppedItems, newItem]);
     }
   }
 }
