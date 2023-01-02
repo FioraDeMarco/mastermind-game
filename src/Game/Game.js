@@ -1,3 +1,5 @@
+// “Do what you can, with what you have, where you are.” ―Theodore Roosevelt.
+// @dnd-kit/utilities      @dnd-kit/sortable
 import React, { useEffect, useState } from "react";
 import { LostGame } from "../Components/LostGame/LostGame";
 import Feedback from "../Components/Feedback/Feedback";
@@ -10,8 +12,9 @@ import Draggable from "../Components/DraggableDroppable/Draggable";
 import Droppable from "../Components/DraggableDroppable/Droppable";
 import MultipleDroppable from "../Components/DraggableDroppable/MultipleDroppable";
 import Item from "../Components/DraggableDroppable/Item";
+import Game1 from "./Game1";
 
-function Game({ ...number }) {
+function Game({ fruitMode, classicMode, ...number }) {
   const [winner, setWinner] = useState(false);
   const [guessCount, setGuessCount] = useState(1);
   const [randomNumber, setRandomNumber] = useState([]);
@@ -30,10 +33,7 @@ function Game({ ...number }) {
   const [activeId, setActiveId] = useState(null);
   const [droppedItems, setDroppedItems] = useState([]);
   const [randomFruit, setRandomFruit] = useState([]);
-
-  useEffect(() => {
-    handleNewGame();
-  }, []);
+  const [guessHistory, setGuessHistory] = useState([]);
 
   const items = ["🍎", "🍌", "🍊", "🍇", "🍓", "🍍", "🥥", "🥝"];
 
@@ -48,8 +48,16 @@ function Game({ ...number }) {
     { 7: "🥝" },
   ];
 
+  //   useEffect(() => {
+  //     handleNewGame();
+  //   }, []);
+
+  if (classicMode) {
+    return <Game1 number={number} />;
+  }
+
   const handleNewGame = (e) => {
-    // e.preventDefault();
+    e.preventDefault();
     setWin(false);
     setWinOpen(false);
     setLoseOpen(false);
@@ -72,45 +80,76 @@ function Game({ ...number }) {
     setRandomNumber(tempRandomNumber);
     setRandomFruit(tempFruit);
     setDroppedItems([]);
+    setUserGuesses([]);
     setUserGuess([]);
     setGuessCount(1);
     setFeedback([]);
   };
 
+  // This game has ended you, you must press new game to play again
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setUserGuess([...droppedItems]);
     setUserGuesses([...userGuesses, droppedItems]);
+    setFeedback([...feedback, message]);
     console.log("userGuesses in submit", userGuesses);
 
     setGuessCount(guessCount + 1);
     let correctLocation = 0;
     let correctValue = 0;
-    // let attemptStr = Object.values(inputValues).join("");
-    // let randomNumberStr = randomNumber.join("");
-    for (let i = 0; i < randomFruit.length; i++) {
-      console.log("userGuess[i]", userGuess[i]);
-      if (droppedItems[i] === randomFruit[i]) {
+
+    // for (let i = 0; i < randomFruit.length; i++) {
+    //   if (droppedItems[i] === randomFruit[i]) {
+    //     correctLocation++;
+    //     correctValue++;
+    //   } else if (randomFruit.includes(droppedItems[i])) {
+    //     correctValue++;
+    //   }
+    // }
+
+    let randomFruitCopy = randomFruit.slice();
+    let droppedItemsCopy = droppedItems.slice();
+
+    randomFruitCopy.forEach((fruit, i) => {
+      if (droppedItems[i] === fruit) {
         correctLocation++;
-      }
-      if (
-        randomFruit.includes(droppedItems[i]) &&
-        droppedItems.includes(randomFruit[i])
-      ) {
         correctValue++;
+        droppedItemsCopy[i] = randomFruitCopy[i] = null;
       }
-    }
+    });
+
+    droppedItemsCopy.forEach((input, i) => {
+      if (input === null) return;
+      let foundIdx = randomFruitCopy.indexOf(input);
+      if (foundIdx > -1) {
+        correctValue++;
+        randomFruitCopy[foundIdx] = null;
+      }
+    });
+
+    // for (let i = 0; i < randomFruit.length; i++) {
+    //   console.log("userGuess[i]", userGuess[i]);
+    //   if (droppedItems[i] === randomFruit[i]) {
+    //     correctLocation++;
+    //   } else if (randomFruit.includes(droppedItems[i])) {
+    //     correctValue++;
+    //   }
+    // }
+
     if (correctLocation === number && correctValue === number) {
       setWin(true);
       setWinOpen(true);
+      setGuessHistory([...guessHistory, userGuesses]);
+      console.log("win guess history", guessHistory);
     }
     if (correctLocation === 0 && correctValue === 0) {
       setMessage("All Incorrect");
     } else {
       setMessage(
-        `You have ${correctValue} correct number${
+        `You have ${correctValue} correct fruit${
           correctValue !== 1 ? "s" : ""
-        } in ${correctLocation} correct location${
+        } and ${correctLocation} correct location${
           correctLocation !== 1 ? "s" : ""
         } `
       );
@@ -118,12 +157,14 @@ function Game({ ...number }) {
     if (guessCount > 9) {
       setLoser(true);
       setLoseOpen(true);
+      setGuessHistory([...guessHistory, userGuesses]);
+      console.log("loose guess history", guessHistory);
     }
     setDroppedItems([]);
     setUserGuess([]);
 
     setMessageOn(true);
-    return { correctValue, correctLocation };
+    // return { correctValue, correctLocation };
   };
 
   let guessArray = Object.values(userGuesses);
@@ -138,6 +179,8 @@ function Game({ ...number }) {
   console.log("droppedItems", droppedItems, typeof droppedItems);
   console.log("userGuess", userGuess);
   console.log("userGuesses", userGuesses);
+  console.log("FEEDBACK", feedback);
+  console.log("GUESS HISTORY =", guessHistory);
 
   return (
     <div className='Game'>
@@ -172,7 +215,9 @@ function Game({ ...number }) {
                 <div className='box-1'>
                   <h4>
                     {!winner && !win
-                      ? `You Have ${11 - guessCount} Attempts Remaining!`
+                      ? `You Have ${11 - guessCount} Attempt${
+                          11 - guessCount !== 1 ? "s" : ""
+                        } Remaining!`
                       : ""}
                   </h4>
                 </div>
@@ -192,6 +237,9 @@ function Game({ ...number }) {
 
                       <button onClick={handleSubmit}>✅</button>
                     </label>
+                    <button onClick={() => setDroppedItems([])}>
+                      Reset 🔄
+                    </button>
                   </div>
                 </form>
               </div>
@@ -202,31 +250,28 @@ function Game({ ...number }) {
             <section className='big-one'>
               <h2>Previous Guesses</h2>
               <section className='one'>
-                <div>
-                  <div>
-                    {finalArray.length > 1
-                      ? finalArray.map((guess, i) => {
-                          let num = i;
+                {feedback.length
+                  ? userGuesses.map((guess, i) => {
+                      // let fruit = userGuesses[i]
+                      let num = i + 1;
 
-                          if (i === 0) return;
-                          return (
-                            <>
-                              <p>Turn #{num}</p>
-                              <div key={`${i}`}></div>
-                              <div key={`${guess}`}>
-                                <div> Guess: {`${guess}`}</div>
-                                <div>
-                                  {feedback[i]
-                                    ? `Feedback: ${feedback[i]}`
-                                    : `${message}`}
-                                </div>
-                              </div>
-                            </>
-                          );
-                        })
-                      : ""}
-                  </div>
-                </div>
+                      return (
+                        <ul>
+                          <li className='list'>
+                            Turn #{num}: <span key={`${i}`}>{guess}</span>
+                            <span>
+                              <br />
+                              {feedback[num] ? (
+                                <span>Feedback: {feedback[num]}</span>
+                              ) : (
+                                `${message}`
+                              )}
+                            </span>
+                          </li>
+                        </ul>
+                      );
+                    })
+                  : ""}
               </section>
               <section className='two'>
                 <div>ACTUAL BOARD CAN GO HERE</div>
@@ -293,38 +338,3 @@ function Game({ ...number }) {
   }
 }
 export default Game;
-
-// <div className='guess-count-and-inputs'>
-// <section className='big-two'>
-//   <section className='three'>
-//     <div className='box-1'>
-//       <h4>
-//         {!winner && !win
-//           ? `You Have ${11 - guessCount} Attempts Remaining!`
-//           : ""}
-//       </h4>
-//     </div>
-//   </section>
-
-//   <section className='four'>
-//     <div>
-//       <div>
-//         <button onClick={handleNewGame}>New Game ⏯ </button>
-//       </div>
-
-//       <form onSubmit={handleSubmit} disabled={!isValid}>
-//         <div>
-//           <h4>{messageOn ? `${message}` : ""}</h4>
-//         </div>
-//         <div className='game-tile-inputs'>
-//           <label>
-//             <div className='smaller-container'>{inputs}</div>
-
-//             <button onClick={handleSubmit}>✅</button>
-//           </label>
-//         </div>
-//       </form>
-//     </div>
-//   </section>
-// </section>
-// </div>

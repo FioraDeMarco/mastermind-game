@@ -6,7 +6,7 @@
   left: 0;
   right: 0;
   bottom: 10px;
-  background-color: #f35c38;
+  background-color: #b51963;
 }
 
 .lose {
@@ -19,7 +19,7 @@
   margin: auto;
   border-radius: 15px;
   border-color: black;
-  background: black;
+  background: white;
   box-shadow: 0 5 15;
-  color: white;
+  color: black;
 }

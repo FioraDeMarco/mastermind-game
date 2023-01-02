@@ -1,4 +1,5 @@
 import { useDraggable } from "@dnd-kit/core";
+import "./DragDrop.css";
 
 function Draggable({ id, children }) {
   const { attributes, listeners, setNodeRef } = useDraggable({

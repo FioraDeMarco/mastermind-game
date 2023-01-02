@@ -6,6 +6,7 @@ import "./Game.css";
 import Toastify, { NAN } from "../Components/Toastify";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "./Game1.css";
 
 function Game1({ ...number }) {
   const [winner, setWinner] = useState(false);
@@ -39,6 +40,7 @@ function Game1({ ...number }) {
     }
 
     setRandomNumber(tempRandomNumber);
+    setInputValues({});
     setInputValues({});
     setUserGuess({});
     setUserGuesses([]);
