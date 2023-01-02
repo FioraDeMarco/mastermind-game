@@ -11,6 +11,7 @@ import Droppable from "../Components/DraggableDroppable/Droppable";
 import MultipleDroppable from "../Components/DraggableDroppable/MultipleDroppable";
 import Item from "../Components/DraggableDroppable/Item";
 import Game1 from "./Game1";
+import { checkIputs } from "../utilis/utils";
 
 function Game({ fruitMode, classicMode, ...number }) {
   const [winner, setWinner] = useState(false);
@@ -85,31 +86,11 @@ function Game({ fruitMode, classicMode, ...number }) {
     setUserGuess([...droppedItems]);
     setUserGuesses([...userGuesses, droppedItems]);
     setFeedback([...feedback, message]);
-    console.log("userGuesses in submit", userGuesses);
-
     setGuessCount(guessCount + 1);
-    let correctLocation = 0;
-    let correctValue = 0;
-
-    let randomFruitCopy = randomFruit.slice();
-    let droppedItemsCopy = droppedItems.slice();
-
-    randomFruitCopy.forEach((fruit, i) => {
-      if (droppedItems[i] === fruit) {
-        correctLocation++;
-        correctValue++;
-        droppedItemsCopy[i] = randomFruitCopy[i] = null;
-      }
-    });
-
-    droppedItemsCopy.forEach((input, i) => {
-      if (input === null) return;
-      let foundIdx = randomFruitCopy.indexOf(input);
-      if (foundIdx > -1) {
-        correctValue++;
-        randomFruitCopy[foundIdx] = null;
-      }
-    });
+    const { correctValue, correctLocation } = checkIputs(
+      randomFruit,
+      droppedItems
+    );
 
     if (correctLocation === number && correctValue === number) {
       setWin(true);
@@ -138,7 +119,6 @@ function Game({ fruitMode, classicMode, ...number }) {
     setUserGuess([]);
 
     setMessageOn(true);
-    return { correctValue, correctLocation };
   };
 
   let guessArray = Object.values(userGuesses);
@@ -151,10 +131,6 @@ function Game({ fruitMode, classicMode, ...number }) {
 
   console.log("randomFruit", randomFruit);
   console.log("droppedItems", droppedItems, typeof droppedItems);
-  console.log("userGuess", userGuess);
-  console.log("userGuesses", userGuesses);
-  console.log("FEEDBACK", feedback);
-  console.log("GUESS HISTORY =", guessHistory);
 
   return (
     <div className='Game'>

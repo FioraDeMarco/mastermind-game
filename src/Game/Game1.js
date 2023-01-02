@@ -7,6 +7,7 @@ import Toastify, { NAN } from "../Components/Toastify";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Game1.css";
+import { checkIputs } from "../utilis/utils";
 
 function Game1({ ...number }) {
   const [winner, setWinner] = useState(false);
@@ -85,21 +86,18 @@ function Game1({ ...number }) {
     setFeedback([...feedback, message]);
 
     setGuessCount(guessCount + 1);
-    let correctLocation = 0;
-    let correctValue = 0;
-    let attemptStr = Object.values(inputValues).join("");
-    let randomNumberStr = randomNumber.join("");
-    for (let i = 0; i < randomNumberStr.length; i++) {
-      if (attemptStr[i] === randomNumberStr[i]) {
-        correctLocation++;
-      }
-      if (
-        randomNumberStr.includes(attemptStr[i]) &&
-        attemptStr.includes(randomNumberStr[i])
-      ) {
-        correctValue++;
-      }
+
+    let inputVal = Object.values(inputValues);
+    let inputVals = [];
+    for (let i = 0; i < inputVal.length; i++) {
+      inputVals.push(parseInt(inputVal[i]));
     }
+
+    const { correctValue, correctLocation } = checkIputs(
+      randomNumber,
+      inputVals
+    );
+
     if (correctLocation === number && correctValue === number) {
       setWin(true);
       setWinOpen(true);
@@ -119,11 +117,10 @@ function Game1({ ...number }) {
       setLoser(true);
       setLoseOpen(true);
     }
-
-    setMessageOn(true);
     return { correctValue, correctLocation };
+    setMessageOn(true);
+    // }
   };
-
   let guessArray = Object.values(userGuesses);
   let finalArray = [];
   for (let i = 0; i < guessArray.length; i++) {
