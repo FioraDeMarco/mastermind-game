@@ -1,6 +1,7 @@
 import "./App.css";
 import React, { useState } from "react";
 import Game from "./Game/Game";
+import Toastify, { info } from "./Components/Toastify";
 
 function App() {
   const [isStarted, setIsStarted] = useState(false);
@@ -39,6 +40,9 @@ function App() {
     setShowModes(false);
     setFruitMode(true);
   };
+  const handleHelpClick = () => {
+    info();
+  };
 
   return (
     <div className='all'>
@@ -52,8 +56,9 @@ function App() {
           <div className='display'>
             <section className='learn'>
               <div className='dropdown'>
-                <button id='instructions' onClick={handleStartGame}>
-                  Instructions
+                <Toastify />
+                <button id='help' onClick={handleHelpClick}>
+                  Help
                 </button>
               </div>
               <div className='dropdown'>

@@ -14,10 +14,21 @@ export const NAN = () => {
   );
 };
 
+export const info = () => {
+  toast(
+    "HOW TO PLAY: At the beginning of each game, you must press new game. The computer makes a new combination of fruit or numbers for you to guess. You must enter your guesses and press the ✅ button to see if you are correct. You get 10 chances, good luck!",
+    {
+      className: "custom-toast",
+      draggable: "true",
+      position: toast.POSITION.TOP_CENTER,
+    }
+  );
+};
+
 const Toastify = () => {
   //   toast.error("No bueno, you've already guessed that combination.");
   //   toast.success("Success!");
-  //   toast.info("Some information for you...");
+  // toast.info("Some information for you...");
   //   toast.warn(
   //     "You must enter an INTEGER from 1 - 7 if you want to be the Mastermind!"
   //   );
@@ -35,7 +46,7 @@ const Toastify = () => {
       <ToastContainer
         draggable={true}
         transition={Bounce}
-        autoClose={8000}
+        autoClose={10000}
       ></ToastContainer>
     </div>
   );

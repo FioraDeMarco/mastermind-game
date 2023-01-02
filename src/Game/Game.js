@@ -87,6 +87,7 @@ function Game({ fruitMode, classicMode, ...number }) {
     setUserGuesses([...userGuesses, droppedItems]);
     setFeedback([...feedback, message]);
     setGuessCount(guessCount + 1);
+
     const { correctValue, correctLocation } = checkIputs(
       randomFruit,
       droppedItems
