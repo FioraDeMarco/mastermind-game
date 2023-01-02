@@ -6,6 +6,9 @@ function App() {
   const [isStarted, setIsStarted] = useState(false);
   const [number, setNumber] = useState(4);
   const [showDifficulties, setShowDifficulties] = useState(false);
+  const [showModes, setShowModes] = useState(false);
+  const [classicMode, setClassicMode] = useState(false);
+  const [fruitMode, setFruitMode] = useState(true);
 
   const handleStartGame = () => {
     setIsStarted(true);
@@ -19,11 +22,22 @@ function App() {
   };
   const handleMedium = () => {
     setShowDifficulties(false);
-    setNumber(5);
+    setNumber(4);
   };
   const handleEasy = () => {
     setShowDifficulties(false);
-    setNumber(4);
+    setNumber(3);
+  };
+  const handleModes = () => {
+    setShowModes(!showModes);
+  };
+  const handleClassicMode = () => {
+    setShowModes(false);
+    setClassicMode(true);
+  };
+  const handleFruitMode = () => {
+    setShowModes(false);
+    setFruitMode(true);
   };
 
   return (
@@ -32,43 +46,57 @@ function App() {
         <h1>Mastermind Game</h1>
       </header>
       {isStarted ? (
-        <Game number={number} />
+        <Game number={number} fruitMode={fruitMode} classicMode={classicMode} />
       ) : (
         <>
           <div className='display'>
             <section className='learn'>
-              Learn More About Mastermind Images
-              <img
-                id='img'
-                src='https://upload.wikimedia.org/wikipedia/commons/2/2d/Mastermind.jpg'
-                height='150'
-                width='130'
-              />
-              <section className='start'>
-                <div className='dropdown'>
-                  <button id='difficulties-button' onClick={handleDifficulties}>
-                    Difficulty
-                  </button>
-                  {showDifficulties ? (
-                    <ul className='levels'>
-                      <li className='hard'>
-                        <button onClick={handleHard}>Hard</button>
-                      </li>
-                      <li className='medium'>
-                        <button onClick={handleMedium}>Medium</button>
-                      </li>
-                      <li className='easy'>
-                        <button onClick={handleEasy}>Easy</button>
-                      </li>
-                    </ul>
-                  ) : (
-                    ""
-                  )}
-                </div>
+              <div className='dropdown'>
+                <button id='instructions' onClick={handleStartGame}>
+                  Instructions
+                </button>
+              </div>
+              <div className='dropdown'>
+                <button onClick={handleModes}>Mode</button>
+                {showModes ? (
+                  <ul className='levels'>
+                    <li className='classic'>
+                      <button onClick={handleClassicMode}>Classic</button>
+                    </li>
+                    <li>
+                      <button onClick={handleFruitMode}>Fruit</button>
+                    </li>
+                  </ul>
+                ) : (
+                  ""
+                )}
+              </div>
+
+              <div className='dropdown'>
+                <button id='difficulties-button' onClick={handleDifficulties}>
+                  Difficulty
+                </button>
+                {showDifficulties ? (
+                  <ul className='levels'>
+                    <li className='hard'>
+                      <button onClick={handleHard}>Hard</button>
+                    </li>
+                    <li className='medium'>
+                      <button onClick={handleMedium}>Medium</button>
+                    </li>
+                    <li className='easy'>
+                      <button onClick={handleEasy}>Easy</button>
+                    </li>
+                  </ul>
+                ) : (
+                  ""
+                )}
+              </div>
+              <div className='dropdown'>
                 <button id='play-game' onClick={handleStartGame}>
                   Play!
                 </button>
-              </section>
+              </div>
             </section>
           </div>
         </>

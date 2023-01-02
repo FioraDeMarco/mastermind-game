@@ -4,16 +4,21 @@ import Feedback from "../Components/Feedback/Feedback";
 import { WonGame } from "../Components/WonGame/WonGame";
 import "./Game.css";
 import Toastify, { NAN } from "../Components/Toastify";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { DndContext, DragOverlay } from "@dnd-kit/core";
+import Draggable from "../Components/DraggableDroppable/Draggable";
+import Droppable from "../Components/DraggableDroppable/Droppable";
+import MultipleDroppable from "../Components/DraggableDroppable/MultipleDroppable";
+import Item from "../Components/DraggableDroppable/Item";
+import Game1 from "./Game1";
 
-function Game({ ...number }) {
+function Game({ fruitMode, classicMode, ...number }) {
   const [winner, setWinner] = useState(false);
   const [guessCount, setGuessCount] = useState(1);
   const [randomNumber, setRandomNumber] = useState([]);
   const [win, setWin] = useState(false);
   const [inputValues, setInputValues] = useState({});
-  const [userGuess, setUserGuess] = useState({});
+  const [userGuess, setUserGuess] = useState([]);
   const [userGuesses, setUserGuesses] = useState([]);
   const [messageOn, setMessageOn] = useState(false);
   const [loser, setLoser] = useState(false);
@@ -23,6 +28,27 @@ function Game({ ...number }) {
   const [loseOpen, setLoseOpen] = useState(false);
   number = Number(Object.values(number));
   const [isValid, setIsValid] = useState(true);
+  const [activeId, setActiveId] = useState(null);
+  const [droppedItems, setDroppedItems] = useState([]);
+  const [randomFruit, setRandomFruit] = useState([]);
+  const [guessHistory, setGuessHistory] = useState([]);
+
+  const items = ["🍎", "🍌", "🍊", "🍇", "🍓", "🍍", "🥥", "🥝"];
+
+  const fruitsNumbers = [
+    { 0: "🍎" },
+    { 1: "🍌" },
+    { 2: "🍊" },
+    { 3: "🍇" },
+    { 4: "🍓" },
+    { 5: "🍍" },
+    { 6: "🥥" },
+    { 7: "🥝" },
+  ];
+
+  if (classicMode) {
+    return <Game1 number={number} />;
+  }
 
   const handleNewGame = (e) => {
     e.preventDefault();
@@ -32,83 +58,72 @@ function Game({ ...number }) {
     setMessageOn(false);
 
     let tempRandomNumber = [];
+    let tempFruit = [];
+
     let index = number;
     while (index > 0) {
-      tempRandomNumber.push(Math.floor(Math.random() * 8));
+      let num = Math.floor(Math.random() * 8);
+
+      tempRandomNumber.push(num);
+
+      tempFruit.push(Object.values(fruitsNumbers[num]).toString());
       index--;
     }
+    console.log("tempFruit", tempFruit);
 
     setRandomNumber(tempRandomNumber);
-    setInputValues({});
-    setUserGuess({});
+    setRandomFruit(tempFruit);
+    setDroppedItems([]);
     setUserGuesses([]);
+    setUserGuess([]);
     setGuessCount(1);
     setFeedback([]);
   };
-  const inputs = [];
-
-  const handleChange = (e) => {
-    const value = e.target.value;
-    let validInputs = "01234567";
-    if (!validInputs.includes(value)) {
-      NAN();
-    }
-
-    setInputValues({
-      ...inputValues,
-      [e.target.name]: value,
-    });
-    setMessageOn(false);
-  };
-
-  for (let i = 1; i <= number; i++) {
-    inputs.push(
-      <input
-        type='text'
-        maxLength={1}
-        value={inputValues[i]}
-        key={`${i}`}
-        name={`${i}`}
-        onChange={handleChange}
-        rules={[{ required: true, message: "You must enter 4 numbers" }]}
-      />
-    );
-  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setUserGuess({ ...inputValues });
-    setUserGuesses([...userGuesses, userGuess]);
-    setUserGuesses([...userGuesses, userGuess]);
+    setUserGuess([...droppedItems]);
+    setUserGuesses([...userGuesses, droppedItems]);
     setFeedback([...feedback, message]);
+    console.log("userGuesses in submit", userGuesses);
 
     setGuessCount(guessCount + 1);
     let correctLocation = 0;
     let correctValue = 0;
-    let attemptStr = Object.values(inputValues).join("");
-    let randomNumberStr = randomNumber.join("");
-    for (let i = 0; i < randomNumberStr.length; i++) {
-      if (attemptStr[i] === randomNumberStr[i]) {
+
+    let randomFruitCopy = randomFruit.slice();
+    let droppedItemsCopy = droppedItems.slice();
+
+    randomFruitCopy.forEach((fruit, i) => {
+      if (droppedItems[i] === fruit) {
         correctLocation++;
-      }
-      if (
-        randomNumberStr.includes(attemptStr[i]) &&
-        attemptStr.includes(randomNumberStr[i])
-      ) {
         correctValue++;
+        droppedItemsCopy[i] = randomFruitCopy[i] = null;
       }
-    }
+    });
+
+    droppedItemsCopy.forEach((input, i) => {
+      if (input === null) return;
+      let foundIdx = randomFruitCopy.indexOf(input);
+      if (foundIdx > -1) {
+        correctValue++;
+        randomFruitCopy[foundIdx] = null;
+      }
+    });
+
     if (correctLocation === number && correctValue === number) {
       setWin(true);
       setWinOpen(true);
+      setGuessHistory([...guessHistory, userGuesses]);
+      console.log("win guess history", guessHistory);
     }
     if (correctLocation === 0 && correctValue === 0) {
       setMessage("All Incorrect");
     } else {
       setMessage(
-        `You have ${correctValue} correct number${
+        `You have ${correctValue} correct fruit${
           correctValue !== 1 ? "s" : ""
-        } in ${correctLocation} correct location${
+        } and ${correctLocation} correct location${
           correctLocation !== 1 ? "s" : ""
         } `
       );
@@ -116,7 +131,11 @@ function Game({ ...number }) {
     if (guessCount > 9) {
       setLoser(true);
       setLoseOpen(true);
+      setGuessHistory([...guessHistory, userGuesses]);
+      console.log("loose guess history", guessHistory);
     }
+    setDroppedItems([]);
+    setUserGuess([]);
 
     setMessageOn(true);
     return { correctValue, correctLocation };
@@ -130,43 +149,71 @@ function Game({ ...number }) {
   }
   finalArray.push(Object.values(userGuess));
 
+  console.log("randomFruit", randomFruit);
+  console.log("droppedItems", droppedItems, typeof droppedItems);
+  console.log("userGuess", userGuess);
+  console.log("userGuesses", userGuesses);
+  console.log("FEEDBACK", feedback);
+  console.log("GUESS HISTORY =", guessHistory);
+
   return (
     <div className='Game'>
       <>
         <Toastify />
         <div className='game-container-1'>
-          <div className='guess-count-and-inputs'>
-            <section className='big-two'>
-              <section className='three'>
+          <div className='container'>
+            <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+              <div className='drag zone'>
+                {items.map((item, index) => (
+                  <Draggable key={index} id={index}>
+                    <Item>{item}</Item>
+                  </Draggable>
+                ))}
+              </div>
+
+              <MultipleDroppable className='drop zone' number={number}>
+                {droppedItems.map((item, index) => (
+                  <Item key={index}>{item}</Item>
+                ))}
+              </MultipleDroppable>
+
+              <DragOverlay dropAnimation={null}>
+                {activeId !== null ? (
+                  <Item className='active'>{items[activeId]}</Item>
+                ) : null}
+              </DragOverlay>
+            </DndContext>
+            <section className='four'>
+              <section>
                 <div className='box-1'>
                   <h4>
                     {!winner && !win
-                      ? `You Have ${11 - guessCount} Attempts Remaining!`
+                      ? `You Have ${11 - guessCount} Attempt${
+                          11 - guessCount !== 1 ? "s" : ""
+                        } Remaining!`
                       : ""}
                   </h4>
                 </div>
               </section>
-
-              <section className='four'>
+              <div>
                 <div>
-                  <div>
-                    <button onClick={handleNewGame}>New Game ⏯ </button>
-                  </div>
-
-                  <form onSubmit={handleSubmit} disabled={!isValid}>
-                    <div>
-                      <h4>{messageOn ? `${message}` : ""}</h4>
-                    </div>
-                    <div className='game-tile-inputs'>
-                      <label>
-                        <div className='smaller-container'>{inputs}</div>
-
-                        <button onClick={handleSubmit}>✅</button>
-                      </label>
-                    </div>
-                  </form>
+                  <button onClick={handleNewGame}>New Game ⏯ </button>
                 </div>
-              </section>
+
+                <form onSubmit={handleSubmit} disabled={!isValid}>
+                  <div>
+                    <h4>{messageOn ? `${message}` : ""}</h4>
+                  </div>
+                  <div className='game-tile-inputs'>
+                    <label>
+                      <button onClick={handleSubmit}>✅</button>
+                    </label>
+                    <button onClick={() => setDroppedItems([])}>
+                      Reset 🔄
+                    </button>
+                  </div>
+                </form>
+              </div>
             </section>
           </div>
 
@@ -174,31 +221,27 @@ function Game({ ...number }) {
             <section className='big-one'>
               <h2>Previous Guesses</h2>
               <section className='one'>
-                <div>
-                  <div>
-                    {finalArray.length > 1
-                      ? finalArray.map((guess, i) => {
-                          let num = i;
+                {feedback.length
+                  ? userGuesses.map((guess, i) => {
+                      let num = i + 1;
 
-                          if (i === 0) return;
-                          return (
-                            <>
-                              <p>Turn #{num}</p>
-                              <div key={`${i}`}></div>
-                              <div key={`${guess}`}>
-                                <div> Guess: {`${guess}`}</div>
-                                <div>
-                                  {feedback[i]
-                                    ? `Feedback: ${feedback[i]}`
-                                    : `${message}`}
-                                </div>
-                              </div>
-                            </>
-                          );
-                        })
-                      : ""}
-                  </div>
-                </div>
+                      return (
+                        <ul>
+                          <li className='list'>
+                            Turn #{num}: <span key={`${i}`}>{guess}</span>
+                            <span>
+                              <br />
+                              {feedback[num] ? (
+                                <span>Feedback: {feedback[num]}</span>
+                              ) : (
+                                `${message}`
+                              )}
+                            </span>
+                          </li>
+                        </ul>
+                      );
+                    })
+                  : ""}
               </section>
               <section className='two'>
                 <div>ACTUAL BOARD CAN GO HERE</div>
@@ -227,6 +270,23 @@ function Game({ ...number }) {
       </>
     </div>
   );
-}
+  function handleDragStart(event) {
+    console.log("handleDragStart event", event);
+    setActiveId(event.active.data.current.id);
+  }
 
+  function handleDragEnd(event) {
+    console.log("hello?");
+    const { active, over } = event;
+    console.log("active", active, "over", over, "event", event);
+
+    let isOver = event.over.id.toString().includes("droppable");
+
+    if (over && isOver) {
+      const newItem = items[active.data.current.id];
+
+      setDroppedItems([...droppedItems, newItem]);
+    }
+  }
+}
 export default Game;
