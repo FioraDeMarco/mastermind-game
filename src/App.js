@@ -2,32 +2,42 @@ import "./App.css";
 import React, { useState } from "react";
 import Game from "./Game/Game";
 import Toastify, { info } from "./Components/Toastify";
+// import { handleNewGame } from "../src/utilis";
 
 function App() {
   const [isStarted, setIsStarted] = useState(false);
-  const [number, setNumber] = useState(4);
+  const [numberOfInputs, setNumberOfInputs] = useState(4);
   const [showDifficulties, setShowDifficulties] = useState(false);
   const [showModes, setShowModes] = useState(false);
   const [classicMode, setClassicMode] = useState(false);
   const [fruitMode, setFruitMode] = useState(true);
+  const [randomFruit, setRandomFruit] = useState([]);
 
-  const handleStartGame = () => {
-    setIsStarted(true);
-  };
+  const fruitsNumbers = [
+    { 0: "🍎" },
+    { 1: "🍌" },
+    { 2: "🍊" },
+    { 3: "🍇" },
+    { 4: "🍓" },
+    { 5: "🍍" },
+    { 6: "🥥" },
+    { 7: "🥝" },
+  ];
+
   const handleDifficulties = () => {
     setShowDifficulties(!showDifficulties);
   };
   const handleHard = () => {
     setShowDifficulties(false);
-    setNumber(7);
+    setNumberOfInputs(7);
   };
   const handleMedium = () => {
     setShowDifficulties(false);
-    setNumber(4);
+    setNumberOfInputs(4);
   };
   const handleEasy = () => {
     setShowDifficulties(false);
-    setNumber(3);
+    setNumberOfInputs(3);
   };
   const handleModes = () => {
     setShowModes(!showModes);
@@ -44,13 +54,43 @@ function App() {
     info();
   };
 
+  // const handleNewNumbers = () => {
+  //   let tempRandomNumber = [];
+  //   let tempFruit = [];
+
+  //   let index = number;
+  //   while (index > 0) {
+  //     let num = Math.floor(Math.random() * 8);
+
+  //     tempRandomNumber.push(num);
+
+  //     tempFruit.push(Object.values(fruitsNumbers[num]).toString());
+  //     index--;
+  //   }
+  //   setRandomFruit(tempFruit);
+  //   // setRandomNumber(tempRandomNumber);
+  // };
+
+  const handleStartGame = () => {
+    setIsStarted(true);
+    // handleNewNumbers();
+  };
+
   return (
     <div className='all'>
       <header className='App-header'>
         <h1>Mastermind Game</h1>
       </header>
       {isStarted ? (
-        <Game number={number} fruitMode={fruitMode} classicMode={classicMode} />
+        <Game
+          numberOfInputs={numberOfInputs}
+          fruitMode={fruitMode}
+          classicMode={classicMode}
+          isStarted={isStarted}
+          // handleNewNumbers={handleNewNumbers}
+          // randomFruit={randomFruit}
+          // setRandomFruit={setRandomFruit}
+        />
       ) : (
         <>
           <div className='display'>

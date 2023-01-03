@@ -1,25 +1,11 @@
 import Droppable from "./Droppable";
 import { useDroppable } from "@dnd-kit/core";
 
-// for (let i = 1; i <= number; i++) {
-//   inputs.push(
-//     <input
-//       type='text'
-
-function MultipleDroppable({ number, children, ...props }) {
-  //   console.log("children1".children);
-  //   console.log("props", props);
-
-  // const droppables = ["1", "2", "3", "4"];
-  // const mediumDroppables = ["1", "2", "3", "4"];
-  // const hardDdroppables = ["1", "2", "3", "4"];
-
+function MultipleDroppable({ numberOfInputs, children, ...props }) {
   let droppables = [];
-  for (let num = 1; num <= number; num++) {
+  for (let num = 1; num <= numberOfInputs; num++) {
     droppables.push(num.toString());
   }
-  // console.log("MULTIPLE DROPPABLE NUMBER", number);
-  // console.log("DROPPABLES", droppables);
 
   const { setNodeRef } = useDroppable({
     // id: "droppable" + props.id,

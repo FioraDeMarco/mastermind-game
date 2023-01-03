@@ -11,9 +11,12 @@ import Droppable from "../Components/DraggableDroppable/Droppable";
 import MultipleDroppable from "../Components/DraggableDroppable/MultipleDroppable";
 import Item from "../Components/DraggableDroppable/Item";
 import Game1 from "./Game1";
-import { checkIputs } from "../utilis/utils";
+import { checkIputs, handleHelpClick } from "../utilis/utils";
+import axios from "axios";
 
-function Game({ fruitMode, classicMode, ...number }) {
+function Game({ isStarted, fruitMode, classicMode, ...numberOfInputs }) {
+  numberOfInputs = Number(Object.values(numberOfInputs));
+
   const [winner, setWinner] = useState(false);
   const [guessCount, setGuessCount] = useState(1);
   const [randomNumber, setRandomNumber] = useState([]);
@@ -27,12 +30,30 @@ function Game({ fruitMode, classicMode, ...number }) {
   const [feedback, setFeedback] = useState([]);
   const [winOpen, setWinOpen] = useState(false);
   const [loseOpen, setLoseOpen] = useState(false);
-  number = Number(Object.values(number));
   const [isValid, setIsValid] = useState(true);
   const [activeId, setActiveId] = useState(null);
   const [droppedItems, setDroppedItems] = useState([]);
   const [randomFruit, setRandomFruit] = useState([]);
   const [guessHistory, setGuessHistory] = useState([]);
+  const [fruits, setFruits] = useState([]);
+
+  const handleNewGame = (e) => {
+    e.preventDefault();
+    setWin(false);
+    setWinOpen(false);
+    setLoseOpen(false);
+    setMessageOn(false);
+    setRandomNumAndFruits(numberOfInputs);
+
+    // setRandomNumber(tempRandomNumber);
+    setRandomFruit(fruits);
+    // handleNewNumbers();
+    setDroppedItems([]);
+    setUserGuesses([]);
+    setUserGuess([]);
+    setGuessCount(1);
+    setFeedback([]);
+  };
 
   const items = ["🍎", "🍌", "🍊", "🍇", "🍓", "🍍", "🥥", "🥝"];
 
@@ -47,21 +68,73 @@ function Game({ fruitMode, classicMode, ...number }) {
     { 7: "🥝" },
   ];
 
+  const numToFruit = {
+    0: "🍎",
+    1: "🍌",
+    2: "🍊",
+    3: "🍇",
+    4: "🍓",
+    5: "🍍",
+    6: "🥥",
+    7: "🥝",
+  };
+
   if (classicMode) {
-    return <Game1 number={number} />;
+    return <Game1 numberOfInputs={numberOfInputs} />;
   }
 
-  const handleNewGame = (e) => {
-    e.preventDefault();
-    setWin(false);
-    setWinOpen(false);
-    setLoseOpen(false);
-    setMessageOn(false);
+  // if (isStarted) {
+  //   handleNewGame();
+  // }
 
+  function setRandomNumAndFruits(num) {
+    let min = 0;
+    let max = 7;
+    let col = 1;
+    let base = 10;
+    let format = "plain";
+    let rnd = "new";
+
+    axios
+      .get(
+        `https://www.random.org/integers/?num=${num}&min=${min}&max=${max}&col=${col}&base=${base}&format=${format}&rnd=${rnd}`
+      )
+      .then((response) => {
+        let winningCombo = extractNums(response);
+        setRandomNumber(extractNums(response));
+
+        let fruits = getFruitsForWinningCombo(winningCombo);
+        setRandomFruit(fruits);
+      })
+      .catch((err) => {
+        console.log("error generating number", err);
+        handleNewNumbers();
+      });
+  }
+
+  function extractNums(response) {
+    const { data } = response;
+    // Data is returned as a string with new lines, so split on the new lines and remove the last new line to get the numbers, and then convert them into integers.
+    let numsStr = data.split("\n");
+    numsStr.pop();
+    let nums = numsStr.map((numStr) => parseInt(numStr));
+    return nums;
+  }
+
+  function getFruitsForWinningCombo(winningCombo) {
+    let fruits = [];
+    winningCombo.map(function (num) {
+      let fruit = numToFruit[num];
+      fruits.push(fruit);
+    });
+    return fruits;
+  }
+
+  const handleNewNumbers = () => {
     let tempRandomNumber = [];
     let tempFruit = [];
 
-    let index = number;
+    let index = numberOfInputs;
     while (index > 0) {
       let num = Math.floor(Math.random() * 8);
 
@@ -70,15 +143,7 @@ function Game({ fruitMode, classicMode, ...number }) {
       tempFruit.push(Object.values(fruitsNumbers[num]).toString());
       index--;
     }
-    console.log("tempFruit", tempFruit);
-
-    setRandomNumber(tempRandomNumber);
     setRandomFruit(tempFruit);
-    setDroppedItems([]);
-    setUserGuesses([]);
-    setUserGuess([]);
-    setGuessCount(1);
-    setFeedback([]);
   };
 
   const handleSubmit = (e) => {
@@ -93,7 +158,7 @@ function Game({ fruitMode, classicMode, ...number }) {
       droppedItems
     );
 
-    if (correctLocation === number && correctValue === number) {
+    if (correctLocation === numberOfInputs && correctValue === numberOfInputs) {
       setWin(true);
       setWinOpen(true);
       setGuessHistory([...guessHistory, userGuesses]);
@@ -139,6 +204,17 @@ function Game({ fruitMode, classicMode, ...number }) {
         <Toastify />
         <div className='game-container-1'>
           <div className='container'>
+            <section>
+              <div id='message' className='box-1'>
+                <h4>
+                  {!winner && !win
+                    ? `You Have ${11 - guessCount} Attempt${
+                        11 - guessCount !== 1 ? "s" : ""
+                      } Remaining!`
+                    : ""}
+                </h4>
+              </div>
+            </section>
             <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
               <div className='drag zone'>
                 {items.map((item, index) => (
@@ -148,7 +224,10 @@ function Game({ fruitMode, classicMode, ...number }) {
                 ))}
               </div>
 
-              <MultipleDroppable className='drop zone' number={number}>
+              <MultipleDroppable
+                className='drop zone'
+                numberOfInputs={numberOfInputs}
+              >
                 {droppedItems.map((item, index) => (
                   <Item key={index}>{item}</Item>
                 ))}
@@ -160,37 +239,29 @@ function Game({ fruitMode, classicMode, ...number }) {
                 ) : null}
               </DragOverlay>
             </DndContext>
+            <div id='message'>
+              <h4>{messageOn ? `${message}` : ""}</h4>
+            </div>
             <section className='four'>
-              <section>
-                <div className='box-1'>
-                  <h4>
-                    {!winner && !win
-                      ? `You Have ${11 - guessCount} Attempt${
-                          11 - guessCount !== 1 ? "s" : ""
-                        } Remaining!`
-                      : ""}
-                  </h4>
-                </div>
-              </section>
               <div>
-                <div>
-                  <button onClick={handleNewGame}>New Game ⏯ </button>
-                </div>
-
-                <form onSubmit={handleSubmit} disabled={!isValid}>
-                  <div>
-                    <h4>{messageOn ? `${message}` : ""}</h4>
-                  </div>
-                  <div className='game-tile-inputs'>
-                    <label>
-                      <button onClick={handleSubmit}>✅</button>
-                    </label>
-                    <button onClick={() => setDroppedItems([])}>
-                      Reset 🔄
-                    </button>
-                  </div>
-                </form>
+                <button onClick={handleNewGame}>New Game ⏯ </button>
               </div>
+
+              <form onSubmit={handleSubmit} disabled={!isValid}>
+                {/* <div>
+                    <h4>{messageOn ? `${message}` : ""}</h4>
+                  </div> */}
+                <div className='game-tile-inputs'>
+                  <label>
+                    <button onClick={handleSubmit}>✅</button>
+                  </label>
+                </div>
+              </form>
+              <button onClick={() => setDroppedItems([])}>Reset 🔄</button>
+
+              <button id='help' onClick={handleHelpClick}>
+                Help
+              </button>
             </section>
           </div>
 

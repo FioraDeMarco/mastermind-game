@@ -3,13 +3,15 @@ import { LostGame } from "../Components/LostGame/LostGame";
 import Feedback from "../Components/Feedback/Feedback";
 import { WonGame } from "../Components/WonGame/WonGame";
 import "./Game.css";
-import Toastify, { NAN } from "../Components/Toastify";
+import Toastify, { NAN, info } from "../Components/Toastify";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Game1.css";
 import { checkIputs } from "../utilis/utils";
 
-function Game1({ ...number }) {
+function Game1({ ...numberOfInputs }) {
+  numberOfInputs = Number(Object.values(numberOfInputs));
+
   const [winner, setWinner] = useState(false);
   const [guessCount, setGuessCount] = useState(1);
   const [randomNumber, setRandomNumber] = useState([]);
@@ -23,7 +25,6 @@ function Game1({ ...number }) {
   const [feedback, setFeedback] = useState([]);
   const [winOpen, setWinOpen] = useState(false);
   const [loseOpen, setLoseOpen] = useState(false);
-  number = Number(Object.values(number));
   const [isValid, setIsValid] = useState(true);
 
   const handleNewGame = (e) => {
@@ -33,14 +34,14 @@ function Game1({ ...number }) {
     setLoseOpen(false);
     setMessageOn(false);
 
-    let tempRandomNumber = [];
-    let index = number;
-    while (index > 0) {
-      tempRandomNumber.push(Math.floor(Math.random() * 8));
-      index--;
-    }
+    // let tempRandomNumber = [];
+    // let index = number;
+    // while (index > 0) {
+    //   tempRandomNumber.push(Math.floor(Math.random() * 8));
+    //   index--;
+    // }
 
-    setRandomNumber(tempRandomNumber);
+    // setRandomNumber(tempRandomNumber);
     setInputValues({});
     setInputValues({});
     setUserGuess({});
@@ -64,7 +65,7 @@ function Game1({ ...number }) {
     setMessageOn(false);
   };
 
-  for (let i = 1; i <= number; i++) {
+  for (let i = 1; i <= numberOfInputs; i++) {
     inputs.push(
       <input
         type='text'
@@ -98,7 +99,7 @@ function Game1({ ...number }) {
       inputVals
     );
 
-    if (correctLocation === number && correctValue === number) {
+    if (correctLocation === numberOfInputs && correctValue === numberOfInputs) {
       setWin(true);
       setWinOpen(true);
     }
@@ -117,8 +118,8 @@ function Game1({ ...number }) {
       setLoser(true);
       setLoseOpen(true);
     }
-    return { correctValue, correctLocation };
     setMessageOn(true);
+    return { correctValue, correctLocation };
     // }
   };
   let guessArray = Object.values(userGuesses);
@@ -150,10 +151,6 @@ function Game1({ ...number }) {
 
               <section className='four'>
                 <div>
-                  <div>
-                    <button onClick={handleNewGame}>New Game ⏯ </button>
-                  </div>
-
                   <form onSubmit={handleSubmit} disabled={!isValid}>
                     <div>
                       <h4>{messageOn ? `${message}` : ""}</h4>
@@ -164,6 +161,9 @@ function Game1({ ...number }) {
 
                         <button onClick={handleSubmit}>✅</button>
                       </label>
+                    </div>
+                    <div>
+                      <button onClick={handleNewGame}>New Game ⏯ </button>
                     </div>
                   </form>
                 </div>

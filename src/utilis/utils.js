@@ -1,3 +1,5 @@
+import Toastify, { NAN, info } from "../Components/Toastify";
+
 export const checkIputs = (randomData, inputValues) => {
   let correctLocation = 0;
   let correctValue = 0;
@@ -24,3 +26,24 @@ export const checkIputs = (randomData, inputValues) => {
 
   return { correctValue, correctLocation };
 };
+
+export const handleHelpClick = () => {
+  info();
+};
+
+// export const handleNewGame = (e, setWin, setWinOpen,setLoseOpen) => {
+//   e.preventDefault();
+//   setWin(false);
+//   setWinOpen(false);
+//   setLoseOpen(false);
+//   setMessageOn(false);
+//   setRandomNumAndFruits(number);
+
+//   // setRandomNumber(tempRandomNumber);
+//   // setRandomFruit(tempFruit);
+//   setDroppedItems([]);
+//   setUserGuesses([]);
+//   setUserGuess([]);
+//   setGuessCount(1);
+//   setFeedback([]);
+// };

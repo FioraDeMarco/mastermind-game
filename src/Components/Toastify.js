@@ -16,7 +16,7 @@ export const NAN = () => {
 
 export const info = () => {
   toast(
-    "HOW TO PLAY: At the beginning of each game, you must press new game. The computer makes a new combination of fruit or numbers for you to guess. You must enter your guesses and press the ✅ button to see if you are correct. You get 10 chances, good luck!",
+    "HOW TO PLAY: At the beginning of each game, you must press new game. The computer makes a new combination of fruit or numbers (click Mode to switch) for you to guess. You must enter your guesses IN ORDER and press the ✅ button to see if you are correct. You get 10 chances, good luck!",
     {
       className: "custom-toast",
       draggable: "true",
@@ -46,7 +46,7 @@ const Toastify = () => {
       <ToastContainer
         draggable={true}
         transition={Bounce}
-        autoClose={10000}
+        autoClose={12000}
       ></ToastContainer>
     </div>
   );
