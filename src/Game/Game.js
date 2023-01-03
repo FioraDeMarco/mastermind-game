@@ -7,8 +7,8 @@ import Toastify, { NAN } from "../Components/Toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import Draggable from "../Components/DraggableDroppable/Draggable";
-import Droppable from "../Components/DraggableDroppable/Droppable";
 import MultipleDroppable from "../Components/DraggableDroppable/MultipleDroppable";
+import Button from "@mui/material/Button";
 import Item from "../Components/DraggableDroppable/Item";
 import { checkIputs, handleHelpClick } from "../utilis/utils";
 import axios from "axios";
@@ -25,7 +25,7 @@ function Game({ isStarted, ...numberOfInputs }) {
   const [feedback, setFeedback] = useState([]);
   const [winOpen, setWinOpen] = useState(false);
   const [loseOpen, setLoseOpen] = useState(false);
-  const [isValid, setIsValid] = useState(true);
+  const [isValid, setIsValid] = useState(false);
   const [activeId, setActiveId] = useState(null);
   const [droppedItems, setDroppedItems] = useState([]);
   const [randomFruit, setRandomFruit] = useState([]);
@@ -65,6 +65,10 @@ function Game({ isStarted, ...numberOfInputs }) {
     setGuessCount(1);
     setFeedback([]);
   }, []);
+
+  const validate = () => {
+    return droppedItems.length !== numberOfInputs;
+  };
 
   //TODO: Rename to `pegs`
   const items = ["🍎", "🍌", "🍊", "🍇", "🍓", "🍍", "🥥", "🥝"];
@@ -232,7 +236,7 @@ function Game({ isStarted, ...numberOfInputs }) {
               </div>
             </section>
             <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-              <div className='drag zone'>
+              <div className='zone'>
                 {items.map((item, index) => (
                   <Draggable key={index} id={index}>
                     <Item>{item}</Item>
@@ -241,11 +245,13 @@ function Game({ isStarted, ...numberOfInputs }) {
               </div>
 
               <MultipleDroppable
-                className='drop zone'
+                className='droppable-container'
                 numberOfInputs={numberOfInputs}
               >
                 {droppedItems.map((item, index) => (
-                  <Item key={index}>{item}</Item>
+                  <Item key={index} className='droppable-card'>
+                    {item}
+                  </Item>
                 ))}
               </MultipleDroppable>
 
@@ -260,24 +266,52 @@ function Game({ isStarted, ...numberOfInputs }) {
             </div>
             <section className='four'>
               <div>
-                <button onClick={handleNewGame}>New Game ⏯ </button>
+                <Button
+                  variant='contained'
+                  sx={{ borderRadius: 50 }}
+                  color='primary'
+                  onClick={handleNewGame}
+                >
+                  New Game ⏯{" "}
+                </Button>
               </div>
 
-              <form onSubmit={handleSubmit} disabled={!isValid}>
+              <form onSubmit={handleSubmit}>
                 {/* <div>
                     <h4>{messageOn ? `${message}` : ""}</h4>
                   </div> */}
                 <div className='game-tile-inputs'>
                   <label>
-                    <button onClick={handleSubmit}>✅</button>
+                    <Button
+                      variant='contained'
+                      sx={{ borderRadius: 50 }}
+                      color='success'
+                      onClick={handleSubmit}
+                      disabled={validate()}
+                    >
+                      ✅
+                    </Button>
                   </label>
                 </div>
               </form>
-              <button onClick={() => setDroppedItems([])}>Reset 🔄</button>
+              <Button
+                variant='contained'
+                sx={{ borderRadius: 50 }}
+                color='success'
+                onClick={() => setDroppedItems([])}
+              >
+                Reset 🔄
+              </Button>
 
-              <button id='help' onClick={handleHelpClick}>
+              <Button
+                variant='contained'
+                sx={{ borderRadius: 50 }}
+                color='success'
+                id='help'
+                onClick={handleHelpClick}
+              >
                 Help
-              </button>
+              </Button>
             </section>
           </div>
 

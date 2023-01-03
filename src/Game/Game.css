@@ -1,4 +1,4 @@
-.game-container-1 {
+/* .game-container-1 {
   background-color: #b51963;
   color: white;
   display: flex;
@@ -9,10 +9,15 @@
   max-width: 1000px;
   border-radius: 5%;
   margin: auto;
-  /* margin-bottom: 20rem; */
+
   border: 3px solid #73ad21;
 }
+.droppable-container{
 
+}
+.droppable-card{
+
+}
 .big-one {
   order: 1;
   width: 100%;
@@ -23,7 +28,9 @@
   width: 100%;
   margin: 2rem;
 }
-
+.guess {
+  width: 100px;
+}
 .guess-count-and-inputs {
   width: 50%;
   display: flex;
@@ -75,4 +82,4 @@
 }
 #message {
   text-align: center;
-}
+} */
