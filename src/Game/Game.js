@@ -10,22 +10,17 @@ import Draggable from "../Components/DraggableDroppable/Draggable";
 import Droppable from "../Components/DraggableDroppable/Droppable";
 import MultipleDroppable from "../Components/DraggableDroppable/MultipleDroppable";
 import Item from "../Components/DraggableDroppable/Item";
-import Game1 from "./Game1";
 import { checkIputs, handleHelpClick } from "../utilis/utils";
 import axios from "axios";
 
-function Game({ isStarted, fruitMode, classicMode, ...numberOfInputs }) {
+function Game({ isStarted, ...numberOfInputs }) {
   numberOfInputs = Number(Object.values(numberOfInputs));
 
-  const [winner, setWinner] = useState(false);
   const [guessCount, setGuessCount] = useState(1);
   const [randomNumber, setRandomNumber] = useState([]);
-  const [win, setWin] = useState(false);
-  const [inputValues, setInputValues] = useState({});
   const [userGuess, setUserGuess] = useState([]);
   const [userGuesses, setUserGuesses] = useState([]);
   const [messageOn, setMessageOn] = useState(false);
-  const [loser, setLoser] = useState(false);
   const [message, setMessage] = useState("");
   const [feedback, setFeedback] = useState([]);
   const [winOpen, setWinOpen] = useState(false);
@@ -39,15 +34,16 @@ function Game({ isStarted, fruitMode, classicMode, ...numberOfInputs }) {
 
   const handleNewGame = (e) => {
     e.preventDefault();
-    setWin(false);
+    // setWin(false);
+    // setRandomNumber(tempRandomNumber);
+    // setRandomFruit(fruits);
+    // handleNewNumbers();
+
     setWinOpen(false);
     setLoseOpen(false);
     setMessageOn(false);
     setRandomNumAndFruits(numberOfInputs);
 
-    // setRandomNumber(tempRandomNumber);
-    setRandomFruit(fruits);
-    // handleNewNumbers();
     setDroppedItems([]);
     setUserGuesses([]);
     setUserGuess([]);
@@ -55,39 +51,37 @@ function Game({ isStarted, fruitMode, classicMode, ...numberOfInputs }) {
     setFeedback([]);
   };
 
+  useEffect(() => {
+    // call api or anything
+    console.log("loaded");
+    setWinOpen(false);
+    setLoseOpen(false);
+    setMessageOn(false);
+    setRandomNumAndFruits(numberOfInputs);
+
+    setDroppedItems([]);
+    setUserGuesses([]);
+    setUserGuess([]);
+    setGuessCount(1);
+    setFeedback([]);
+  }, []);
+
+  //TODO: Rename to `pegs`
   const items = ["🍎", "🍌", "🍊", "🍇", "🍓", "🍍", "🥥", "🥝"];
 
-  const fruitsNumbers = [
-    { 0: "🍎" },
-    { 1: "🍌" },
-    { 2: "🍊" },
-    { 3: "🍇" },
-    { 4: "🍓" },
-    { 5: "🍍" },
-    { 6: "🥥" },
-    { 7: "🥝" },
-  ];
+  function setRandomNumAndFruits(num) {
+    // Make API CALL
+    // const randomPegs = generateRandomPegs(num);
+    // setRandomNumber(randomPegs);
+    // API Call returns result/random numbers
+    // Call useState using the results
 
-  const numToFruit = {
-    0: "🍎",
-    1: "🍌",
-    2: "🍊",
-    3: "🍇",
-    4: "🍓",
-    5: "🍍",
-    6: "🥥",
-    7: "🥝",
-  };
-
-  if (classicMode) {
-    return <Game1 numberOfInputs={numberOfInputs} />;
+    //OLD
+    generateRandomPegs(num);
   }
 
-  // if (isStarted) {
-  //   handleNewGame();
-  // }
-
-  function setRandomNumAndFruits(num) {
+  //TODO: Move to RandomNumberGeneration.js
+  function generateRandomPegs(num) {
     let min = 0;
     let max = 7;
     let col = 1;
@@ -107,29 +101,17 @@ function Game({ isStarted, fruitMode, classicMode, ...numberOfInputs }) {
         setRandomFruit(fruits);
       })
       .catch((err) => {
-        console.log("error generating number", err);
+        // Random.org has a rate limiter on their RNG endpoint. If we break the limit during testing and
+        // our IP gets banned, fall back to generating the RNG locally
+        console.log(
+          "Error generating number using RNG API. Falling back to local generator.",
+          err
+        );
         handleNewNumbers();
       });
   }
 
-  function extractNums(response) {
-    const { data } = response;
-    // Data is returned as a string with new lines, so split on the new lines and remove the last new line to get the numbers, and then convert them into integers.
-    let numsStr = data.split("\n");
-    numsStr.pop();
-    let nums = numsStr.map((numStr) => parseInt(numStr));
-    return nums;
-  }
-
-  function getFruitsForWinningCombo(winningCombo) {
-    let fruits = [];
-    winningCombo.map(function (num) {
-      let fruit = numToFruit[num];
-      fruits.push(fruit);
-    });
-    return fruits;
-  }
-
+  //TODO: Move to RandomNumberGeneration.js
   const handleNewNumbers = () => {
     let tempRandomNumber = [];
     let tempFruit = [];
@@ -140,11 +122,30 @@ function Game({ isStarted, fruitMode, classicMode, ...numberOfInputs }) {
 
       tempRandomNumber.push(num);
 
-      tempFruit.push(Object.values(fruitsNumbers[num]).toString());
+      tempFruit.push(items[num]);
       index--;
     }
     setRandomFruit(tempFruit);
   };
+
+  function extractNums(response) {
+    const { data } = response;
+    // Data is returned as a string with new lines, so split on the new lines
+    // and remove the last new line to get the numbers, and then convert them into integers.
+    let numsStr = data.split("\n");
+    numsStr.pop();
+    let nums = numsStr.map((numStr) => parseInt(numStr));
+    return nums;
+  }
+
+  function getFruitsForWinningCombo(winningCombo) {
+    let fruits = [];
+    winningCombo.map(function (num) {
+      let fruit = items[num];
+      fruits.push(fruit);
+    });
+    return fruits;
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -158,12 +159,14 @@ function Game({ isStarted, fruitMode, classicMode, ...numberOfInputs }) {
       droppedItems
     );
 
+    // Refactor out to checkGuessCorrectness()
     if (correctLocation === numberOfInputs && correctValue === numberOfInputs) {
-      setWin(true);
       setWinOpen(true);
       setGuessHistory([...guessHistory, userGuesses]);
       console.log("win guess history", guessHistory);
     }
+
+    // Refactor out to updateUserFeedback()
     if (correctLocation === 0 && correctValue === 0) {
       setMessage("All Incorrect");
     } else {
@@ -175,26 +178,39 @@ function Game({ isStarted, fruitMode, classicMode, ...numberOfInputs }) {
         } `
       );
     }
+
+    // Refactor out to checkLoseCondition()
     if (guessCount > 9) {
-      setLoser(true);
       setLoseOpen(true);
       setGuessHistory([...guessHistory, userGuesses]);
       console.log("loose guess history", guessHistory);
     }
+
     setDroppedItems([]);
     setUserGuess([]);
-
     setMessageOn(true);
   };
 
-  let guessArray = Object.values(userGuesses);
-  let finalArray = [];
-  for (let i = 0; i < guessArray.length; i++) {
-    let obj = guessArray[i];
-    finalArray.push(Object.values(obj));
+  function handleDragStart(event) {
+    console.log("handleDragStart event", event);
+    setActiveId(event.active.data.current.id);
   }
-  finalArray.push(Object.values(userGuess));
 
+  function handleDragEnd(event) {
+    console.log("hello?");
+    const { active, over } = event;
+    console.log("active", active, "over", over, "event", event);
+
+    let isOver = event.over.id.toString().includes("droppable");
+
+    if (over && isOver) {
+      const newItem = items[active.data.current.id];
+
+      setDroppedItems([...droppedItems, newItem]);
+    }
+  }
+
+  // TODO: Remember to remove
   console.log("randomFruit", randomFruit);
   console.log("droppedItems", droppedItems, typeof droppedItems);
 
@@ -207,7 +223,7 @@ function Game({ isStarted, fruitMode, classicMode, ...numberOfInputs }) {
             <section>
               <div id='message' className='box-1'>
                 <h4>
-                  {!winner && !win
+                  {!winOpen && !loseOpen
                     ? `You Have ${11 - guessCount} Attempt${
                         11 - guessCount !== 1 ? "s" : ""
                       } Remaining!`
@@ -270,13 +286,13 @@ function Game({ isStarted, fruitMode, classicMode, ...numberOfInputs }) {
               <h2>Previous Guesses</h2>
               <section className='one'>
                 {feedback.length
-                  ? userGuesses.map((guess, i) => {
+                  ? userGuesses.reverse().map((guess, i) => {
                       let num = i + 1;
 
                       return (
-                        <ul>
+                        <ul key={`${i}`}>
                           <li className='list'>
-                            Turn #{num}: <span key={`${i}`}>{guess}</span>
+                            Turn #{num}: <span>{guess}</span>
                             <span>
                               <br />
                               {feedback[num] ? (
@@ -318,23 +334,5 @@ function Game({ isStarted, fruitMode, classicMode, ...numberOfInputs }) {
       </>
     </div>
   );
-  function handleDragStart(event) {
-    console.log("handleDragStart event", event);
-    setActiveId(event.active.data.current.id);
-  }
-
-  function handleDragEnd(event) {
-    console.log("hello?");
-    const { active, over } = event;
-    console.log("active", active, "over", over, "event", event);
-
-    let isOver = event.over.id.toString().includes("droppable");
-
-    if (over && isOver) {
-      const newItem = items[active.data.current.id];
-
-      setDroppedItems([...droppedItems, newItem]);
-    }
-  }
 }
 export default Game;

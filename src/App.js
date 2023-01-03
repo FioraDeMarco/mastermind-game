@@ -2,78 +2,22 @@ import "./App.css";
 import React, { useState } from "react";
 import Game from "./Game/Game";
 import Toastify, { info } from "./Components/Toastify";
-// import { handleNewGame } from "../src/utilis";
+import Button from "@mui/material/Button";
 
 function App() {
+  const HARD_MODE_INPUTS = 7;
+  const MEDIUM_MODE_INPUTS = 4;
+  const EASY_MODE_INPUTS = 3;
+
   const [isStarted, setIsStarted] = useState(false);
-  const [numberOfInputs, setNumberOfInputs] = useState(4);
-  const [showDifficulties, setShowDifficulties] = useState(false);
-  const [showModes, setShowModes] = useState(false);
-  const [classicMode, setClassicMode] = useState(false);
-  const [fruitMode, setFruitMode] = useState(true);
-  const [randomFruit, setRandomFruit] = useState([]);
+  const [numberOfInputs, setNumberOfInputs] = useState(MEDIUM_MODE_INPUTS);
 
-  const fruitsNumbers = [
-    { 0: "🍎" },
-    { 1: "🍌" },
-    { 2: "🍊" },
-    { 3: "🍇" },
-    { 4: "🍓" },
-    { 5: "🍍" },
-    { 6: "🥥" },
-    { 7: "🥝" },
-  ];
-
-  const handleDifficulties = () => {
-    setShowDifficulties(!showDifficulties);
-  };
-  const handleHard = () => {
-    setShowDifficulties(false);
-    setNumberOfInputs(7);
-  };
-  const handleMedium = () => {
-    setShowDifficulties(false);
-    setNumberOfInputs(4);
-  };
-  const handleEasy = () => {
-    setShowDifficulties(false);
-    setNumberOfInputs(3);
-  };
-  const handleModes = () => {
-    setShowModes(!showModes);
-  };
-  const handleClassicMode = () => {
-    setShowModes(false);
-    setClassicMode(true);
-  };
-  const handleFruitMode = () => {
-    setShowModes(false);
-    setFruitMode(true);
-  };
   const handleHelpClick = () => {
     info();
   };
 
-  // const handleNewNumbers = () => {
-  //   let tempRandomNumber = [];
-  //   let tempFruit = [];
-
-  //   let index = number;
-  //   while (index > 0) {
-  //     let num = Math.floor(Math.random() * 8);
-
-  //     tempRandomNumber.push(num);
-
-  //     tempFruit.push(Object.values(fruitsNumbers[num]).toString());
-  //     index--;
-  //   }
-  //   setRandomFruit(tempFruit);
-  //   // setRandomNumber(tempRandomNumber);
-  // };
-
   const handleStartGame = () => {
     setIsStarted(true);
-    // handleNewNumbers();
   };
 
   return (
@@ -82,65 +26,42 @@ function App() {
         <h1>Mastermind Game</h1>
       </header>
       {isStarted ? (
-        <Game
-          numberOfInputs={numberOfInputs}
-          fruitMode={fruitMode}
-          classicMode={classicMode}
-          isStarted={isStarted}
-          // handleNewNumbers={handleNewNumbers}
-          // randomFruit={randomFruit}
-          // setRandomFruit={setRandomFruit}
-        />
+        <Game numberOfInputs={numberOfInputs} isStarted={isStarted} />
       ) : (
         <>
           <div className='display'>
             <section className='learn'>
               <div className='dropdown'>
                 <Toastify />
-                <button id='help' onClick={handleHelpClick}>
+                <Button id='help' onClick={handleHelpClick}>
                   Help
-                </button>
+                </Button>
               </div>
-              <div className='dropdown'>
-                <button onClick={handleModes}>Mode</button>
-                {showModes ? (
-                  <ul className='levels'>
-                    <li className='classic'>
-                      <button onClick={handleClassicMode}>Classic</button>
-                    </li>
-                    <li>
-                      <button onClick={handleFruitMode}>Fruit</button>
-                    </li>
-                  </ul>
-                ) : (
-                  ""
-                )}
+
+              <div>
+                <h2>Difficulty</h2>
+                <Button onClick={() => setNumberOfInputs(HARD_MODE_INPUTS)}>
+                  Hard
+                </Button>
+                <Button onClick={() => setNumberOfInputs(MEDIUM_MODE_INPUTS)}>
+                  Medium
+                </Button>
+                <Button onClick={() => setNumberOfInputs(EASY_MODE_INPUTS)}>
+                  Easy
+                </Button>
               </div>
 
               <div className='dropdown'>
-                <button id='difficulties-button' onClick={handleDifficulties}>
-                  Difficulty
-                </button>
-                {showDifficulties ? (
-                  <ul className='levels'>
-                    <li className='hard'>
-                      <button onClick={handleHard}>Hard</button>
-                    </li>
-                    <li className='medium'>
-                      <button onClick={handleMedium}>Medium</button>
-                    </li>
-                    <li className='easy'>
-                      <button onClick={handleEasy}>Easy</button>
-                    </li>
-                  </ul>
-                ) : (
-                  ""
-                )}
-              </div>
-              <div className='dropdown'>
-                <button id='play-game' onClick={handleStartGame}>
+                <Button
+                  variant='contained'
+                  sx={{ borderRadius: 50 }}
+                  color='success'
+                  size='large'
+                  id='play-game'
+                  onClick={handleStartGame}
+                >
                   Play!
-                </button>
+                </Button>
               </div>
             </section>
           </div>
