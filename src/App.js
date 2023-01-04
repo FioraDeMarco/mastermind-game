@@ -1,104 +1,138 @@
-import "./App.css";
+//import "./App.css";
 import React, { useState } from "react";
 import Game from "./Game/Game";
+import Toastify, { info } from "./Components/Toastify";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import { ButtonGroup, Grid, Box } from "@mui/material";
 
 function App() {
+  const HARD_MODE_INPUTS = 5;
+  const MEDIUM_MODE_INPUTS = 4;
+  const EASY_MODE_INPUTS = 3;
+
   const [isStarted, setIsStarted] = useState(false);
-  const [number, setNumber] = useState(4);
-  const [showDifficulties, setShowDifficulties] = useState(false);
-  const [showModes, setShowModes] = useState(false);
-  const [classicMode, setClassicMode] = useState(false);
-  const [fruitMode, setFruitMode] = useState(true);
+  const [numberOfInputs, setNumberOfInputs] = useState(MEDIUM_MODE_INPUTS);
+
+  const handleHelpClick = () => {
+    info();
+  };
 
   const handleStartGame = () => {
     setIsStarted(true);
   };
-  const handleDifficulties = () => {
-    setShowDifficulties(!showDifficulties);
-  };
-  const handleHard = () => {
-    setShowDifficulties(false);
-    setNumber(7);
-  };
-  const handleMedium = () => {
-    setShowDifficulties(false);
-    setNumber(4);
-  };
-  const handleEasy = () => {
-    setShowDifficulties(false);
-    setNumber(3);
-  };
-  const handleModes = () => {
-    setShowModes(!showModes);
-  };
-  const handleClassicMode = () => {
-    setShowModes(false);
-    setClassicMode(true);
-  };
-  const handleFruitMode = () => {
-    setShowModes(false);
-    setFruitMode(true);
-  };
 
   return (
-    <div className='all'>
-      <header className='App-header'>
-        <h1>Mastermind Game</h1>
-      </header>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       {isStarted ? (
-        <Game number={number} fruitMode={fruitMode} classicMode={classicMode} />
+        <Game numberOfInputs={numberOfInputs} isStarted={isStarted} />
       ) : (
         <>
-          <div className='display'>
-            <section className='learn'>
-              <div className='dropdown'>
-                <button id='instructions' onClick={handleStartGame}>
-                  Instructions
-                </button>
-              </div>
-              <div className='dropdown'>
-                <button onClick={handleModes}>Mode</button>
-                {showModes ? (
-                  <ul className='levels'>
-                    <li className='classic'>
-                      <button onClick={handleClassicMode}>Classic</button>
-                    </li>
-                    <li>
-                      <button onClick={handleFruitMode}>Fruit</button>
-                    </li>
-                  </ul>
-                ) : (
-                  ""
-                )}
-              </div>
+          <Box
+            sx={{
+              padding: "10rem",
+              boxShadow: "0 8px 8px 0 grey",
+              backgroundColor: "pink",
+              width: "100%",
+            }}
+          >
+            <Grid
+              container
+              display='flex'
+              direction='column'
+              alignItems='center'
+              justify='flex-start'
+              minWidth='0rem'
+            >
+              <Typography variant='h2'>Mastermind Game</Typography>
 
-              <div className='dropdown'>
-                <button id='difficulties-button' onClick={handleDifficulties}>
-                  Difficulty
-                </button>
-                {showDifficulties ? (
-                  <ul className='levels'>
-                    <li className='hard'>
-                      <button onClick={handleHard}>Hard</button>
-                    </li>
-                    <li className='medium'>
-                      <button onClick={handleMedium}>Medium</button>
-                    </li>
-                    <li className='easy'>
-                      <button onClick={handleEasy}>Easy</button>
-                    </li>
-                  </ul>
-                ) : (
-                  ""
-                )}
-              </div>
-              <div className='dropdown'>
-                <button id='play-game' onClick={handleStartGame}>
-                  Play!
-                </button>
-              </div>
-            </section>
-          </div>
+              <Typography variant='h5' marginTop='3em'>
+                Difficulty
+              </Typography>
+              <Grid
+                container
+                xs={12}
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Grid
+                  container
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    gap: "1rem",
+                  }}
+                >
+                  <ButtonGroup size='large' aria-label='large button group'>
+                    <Button
+                      variant='contained'
+                      color='primary'
+                      onClick={() => setNumberOfInputs(HARD_MODE_INPUTS)}
+                      sx={{ width: "100%", margin: "1rem 0", gap: "5px" }}
+                    >
+                      Hard
+                    </Button>
+                    <Button
+                      variant='contained'
+                      color='primary'
+                      onClick={() => setNumberOfInputs(MEDIUM_MODE_INPUTS)}
+                      sx={{ width: "100%", margin: "1rem 0", gap: "5px" }}
+                    >
+                      Medium
+                    </Button>
+                    <Button
+                      variant='contained'
+                      color='primary'
+                      onClick={() => setNumberOfInputs(EASY_MODE_INPUTS)}
+                      sx={{ width: "100%", margin: "1rem 0", gap: "1rem" }}
+                    >
+                      Easy
+                    </Button>
+                  </ButtonGroup>
+                </Grid>
+
+                <Grid
+                  container
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    gap: "1rem",
+                    paddingTop: "5rem",
+                  }}
+                >
+                  <Button
+                    variant='contained'
+                    color='success'
+                    size='large'
+                    id='play-game'
+                    onClick={handleStartGame}
+                  >
+                    Play!
+                  </Button>
+                  <Toastify />
+                  <Button
+                    variant='contained'
+                    color='secondary'
+                    sx={{ color: "#ffffff" }}
+                    onClick={handleHelpClick}
+                  >
+                    Help
+                  </Button>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Box>
         </>
       )}
     </div>

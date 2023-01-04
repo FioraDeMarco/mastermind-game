@@ -1,6 +1,7 @@
 import React from "react";
 import "./WonGame.css";
 import Confetti from "react-confetti";
+import Button from "@mui/material/Button";
 
 export const WonGame = ({ closeWin, handleNewGame }) => {
   return (
@@ -9,11 +10,17 @@ export const WonGame = ({ closeWin, handleNewGame }) => {
       <div className='won'>
         <h1>{`YOU ARE THE MASTERMIND!`}</h1>
         <h3>All correct, You Win!</h3>
-        <h6>🍊 You glad?</h6>
-        <button id='new-game' onClick={handleNewGame}>
+        <h3>🍊 You glad?</h3>
+        <Button
+          variant='contained'
+          sx={{ borderRadius: 50 }}
+          color='success'
+          onClick={handleNewGame}
+          id='new-game'
+          onClick={handleNewGame}
+        >
           Play Again! ⏯
-        </button>
-        <button onClick={closeWin}>Close X</button>
+        </Button>
       </div>
     </div>
   );
