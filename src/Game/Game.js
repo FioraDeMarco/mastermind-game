@@ -68,8 +68,7 @@ function Game({ isStarted, ...numberOfInputs }) {
     return droppedItems.length !== numberOfInputs;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     setUserGuesses([...userGuesses, droppedItems]);
 
     const { correctValue, correctLocation } = checkUserInputs(
@@ -104,7 +103,7 @@ function Game({ isStarted, ...numberOfInputs }) {
       setDroppedItems([...droppedItems, newItem]);
     }
   }
-  console.log("radomFruit", randomFruit);
+
   return (
     <div className='game'>
       <>
