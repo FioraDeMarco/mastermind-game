@@ -2,7 +2,7 @@ import React from "react";
 import "./LostGame.css";
 import Button from "@mui/material/Button";
 
-export const LostGame = ({ closeLose, handleNewGame }) => {
+export const LostGame = ({ handleNewGame }) => {
   return (
     <div className='lose-container'>
       <div className='lose'>

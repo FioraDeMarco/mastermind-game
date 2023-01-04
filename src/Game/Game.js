@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { LostGame } from "../Components/LostGame/LostGame";
 import { WonGame } from "../Components/WonGame/WonGame";
 import "./Game.css";
-import Toastify, { NAN } from "../Components/Toastify";
+import Toastify from "../Components/Toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import Draggable from "../Components/DraggableDroppable/Draggable";
@@ -16,8 +16,10 @@ import {
   handleHelpClick,
   checkWinCondition,
 } from "../utilis/utils";
-import { generateRandomPegs } from "../utilis/RandomNumberGeneration";
-import axios from "axios";
+import {
+  generateRandomPegs,
+  handleNewNumbers,
+} from "../utilis/RandomNumberGeneration";
 
 function Game({ isStarted, ...numberOfInputs }) {
   numberOfInputs = Number(Object.values(numberOfInputs));
@@ -33,11 +35,14 @@ function Game({ isStarted, ...numberOfInputs }) {
   const [droppedItems, setDroppedItems] = useState([]);
   const [randomFruit, setRandomFruit] = useState([]);
 
+  const pegs = ["🍎", "🍌", "🍊", "🍇", "🍓", "🍍", "🥥", "🥝"];
+
   const setStateForNewGame = () => {
     setWinOpen(false);
     setLoseOpen(false);
     setMessageOn(false);
     setDroppedItems([]);
+    setFeedback([]);
     getPegs();
   };
 
@@ -51,17 +56,16 @@ function Game({ isStarted, ...numberOfInputs }) {
   }, []);
 
   const getPegs = async () => {
-    const randomPegs = await generateRandomPegs(pegs, numberOfInputs);
-    console.log("pegsResponse", randomPegs);
+    let randomPegs = await generateRandomPegs(pegs, numberOfInputs);
+    if (!randomPegs) {
+      randomPegs = handleNewNumbers(pegs, numberOfInputs);
+    }
     setRandomFruit(randomPegs);
   };
 
   const validate = () => {
     return droppedItems.length !== numberOfInputs;
   };
-
-  //TODO: Rename to `pegs`
-  const pegs = ["🍎", "🍌", "🍊", "🍇", "🍓", "🍍", "🥥", "🥝"];
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -81,14 +85,13 @@ function Game({ isStarted, ...numberOfInputs }) {
     setWinOpen(
       checkWinCondition(correctValue, correctLocation, numberOfInputs)
     );
-
+    setMessageOn(true);
     setLoseOpen(checkLoseCondition(guessCount));
     setDroppedItems([]);
     handleNewGame();
   };
 
   function handleDragStart(event) {
-    console.log("handleDragStart event", event);
     setActiveId(event.active.data.current.id);
   }
 
@@ -100,10 +103,6 @@ function Game({ isStarted, ...numberOfInputs }) {
       setDroppedItems([...droppedItems, newItem]);
     }
   }
-
-  // TODO: Remember to remove
-  console.log("randomFruit!!!!!!!!!", randomFruit);
-  console.log("droppedItems", droppedItems, typeof droppedItems);
 
   return (
     <div className='game'>
@@ -139,7 +138,7 @@ function Game({ isStarted, ...numberOfInputs }) {
                       <Button
                         variant='contained'
                         sx={{ borderRadius: 50 }}
-                        color='success'
+                        color='secondary'
                         onClick={handleSubmit}
                         disabled={validate()}
                       >
@@ -159,7 +158,7 @@ function Game({ isStarted, ...numberOfInputs }) {
                   <Button
                     variant='contained'
                     sx={{ borderRadius: 50 }}
-                    color='success'
+                    color='secondary'
                     id='help'
                     onClick={handleHelpClick}
                   >
@@ -203,7 +202,7 @@ function Game({ isStarted, ...numberOfInputs }) {
           <section className='feedback'>
             <h2>Previous Guesses</h2>
             {feedback.length
-              ? userGuesses.reverse().map((guess, i) => {
+              ? userGuesses.map((guess, i) => {
                   let num = i + 1;
 
                   return (

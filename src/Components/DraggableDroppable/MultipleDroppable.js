@@ -8,7 +8,6 @@ function MultipleDroppable({ numberOfInputs, children, ...props }) {
   }
 
   const { setNodeRef } = useDroppable({
-    // id: "droppable" + props.id,
     id: "droppable" + props.id,
   });
 

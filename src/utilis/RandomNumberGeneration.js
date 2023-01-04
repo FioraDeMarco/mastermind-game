@@ -1,36 +1,19 @@
 import axios from "axios";
 
 export async function generateRandomPegs(pegs, numberOfInputs) {
-  console.log("numberO", numberOfInputs);
   let min = 0;
   let max = 7;
   let col = 1;
   let base = 10;
   let format = "plain";
   let rnd = "new";
-  console.log("HELLO WORLD");
-  await axios
-    .get(
-      `https://www.random.org/integers/?num=${numberOfInputs}&min=${min}&max=${max}&col=${col}&base=${base}&format=${format}&rnd=${rnd}`
-    )
-    .then((response) => {
-      let winningCombo = extractNums(response);
-      console.log("response", response);
-      let pegsForwinningCombo = getPegsForWinningCombo(pegs, winningCombo);
-      console.log("PEGS4WIN", pegsForwinningCombo);
-      return pegsForwinningCombo;
-    })
-    .catch((err) => {
-      console.log("api error", err);
-    });
+
   try {
     const response = await axios.get(
       `https://www.random.org/integers/?num=${numberOfInputs}&min=${min}&max=${max}&col=${col}&base=${base}&format=${format}&rnd=${rnd}`
     );
     let winningCombo = extractNums(response);
-    console.log("response", response);
     let pegsForwinningCombo = getPegsForWinningCombo(pegs, winningCombo);
-    console.log("PEGS4WIN", pegsForwinningCombo);
     return pegsForwinningCombo;
   } catch (err) {
     // Random.org has a rate limiter on their RNG endpoint. If we break the limit during testing and
@@ -44,9 +27,9 @@ export async function generateRandomPegs(pegs, numberOfInputs) {
 }
 
 //Back up random number generator
-const handleNewNumbers = (pegs, numberOfInputs) => {
+export const handleNewNumbers = (pegs, numberOfInputs) => {
   let tempRandomNumber = [];
-  let randomPegs = [];
+  let pegsForwinningCombo = [];
 
   let index = numberOfInputs;
   while (index > 0) {
@@ -54,17 +37,16 @@ const handleNewNumbers = (pegs, numberOfInputs) => {
 
     tempRandomNumber.push(num);
 
-    randomPegs.push(pegs[num]);
+    pegsForwinningCombo.push(pegs[num]);
     index--;
   }
-  // setRandomFruit(tempFruit);
-  return randomPegs;
+
+  return pegsForwinningCombo;
 };
 
 function extractNums(response) {
-  console.log("I am the extract numsfunction");
   const { data } = response;
-  // Data is returned as a string with new lines, so split on the new lines
+  // Data is returned as a string with new lines, so I had to split on the new lines
   // and remove the last new line to get the numbers, and then convert them into integers.
   let numsStr = data.split("\n");
   numsStr.pop();
@@ -72,8 +54,8 @@ function extractNums(response) {
   return nums;
 }
 
+//This function converts the random number into a random pattern of fruit at that idx
 function getPegsForWinningCombo(pegs, winningCombo) {
-  console.log("I am the get pegs for win function");
   let fruits = [];
   winningCombo.map(function (num) {
     let fruit = pegs[num];

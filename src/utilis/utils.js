@@ -1,6 +1,6 @@
-import Toastify, { NAN, info } from "../Components/Toastify";
+import { info } from "../Components/Toastify";
 
-// function to check correctness of guesses
+// function to check correctness of user guess input
 
 export const checkUserInputs = (randomFruit, droppedItems) => {
   let correctLocation = 0;
@@ -17,7 +17,7 @@ export const checkUserInputs = (randomFruit, droppedItems) => {
     }
   });
 
-  droppedItemsCopy.forEach((input, i) => {
+  droppedItemsCopy.forEach((input) => {
     if (input === null) return;
     let foundIdx = randomFruitCopy.indexOf(input);
     if (foundIdx > -1) {
@@ -40,14 +40,14 @@ export const checkWinCondition = (
   return false;
 };
 
-export const updateUserFeedback = (correctLocation, correctValue) => {
+export const updateUserFeedback = (correctValue, correctLocation) => {
   if (correctLocation === 0 && correctValue === 0) {
     return "All Incorrect";
   } else {
     return `You have ${correctValue} correct fruit${
       correctValue !== 1 ? "s" : ""
-    } and ${correctLocation} correct location${
-      correctLocation !== 1 ? "s" : ""
+    } in ${correctLocation} correct location${
+      correctLocation !== 1 ? "s!" : "!"
     } `;
   }
 };
