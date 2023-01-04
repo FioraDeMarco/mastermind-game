@@ -23,9 +23,9 @@ $npm start
 Runs the app in the development mode.
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-<h3 align-items="center">
-About this game
-</h3>
+<h2 align-items="center">
+🟠   About this game
+</h2>
 
 To play, you can select a difficulty level. Then you drop your guesses into the slots, and press check to see your feedback beneath. If you need to hear the directions again, there is a "help" button.
 
@@ -34,36 +34,33 @@ In the early stages of this project, I wanted to make sure that I had covered al
 This is an image of the initial rough draft
 
 <div align-items='center'>
-<img src="public/img/First-Iteration.jpeg" alt="there was supposed to be an impressive image here" width="200"/>
+<img src="public/img/First-Iteration.jpeg" alt="there was supposed to be an impressive image here" width="300"/>
 <div>
-
+<br />
 After much testing on the the algorithm used and the functionality, I decided to take it a step further and implement react-dnd drag and drop functionality to receive user input.
-
+<br />
 <div align-items='center'>
-<img src="public/img/Fiora-Mastermind-Game.jpeg" alt="there was supposed to be another impressive image here" width="200"/>
+<img src="public/img/Fiora-Mastermind-Game.jpeg" alt="there was supposed to be another impressive image here" width="300"/>
 <div>
-
-<h4 align-items='center'>
-Project requirements:
-</h4>
+<br />
+<h2 align-items='center'>
+🟠 Project requirements:
+</h2>
 Generate 4 random numbers using Random.org API
 User is able to enter a guess for the combination
 User is able to view the history of their guesses
 The number of guesses remaining is displayed
 
-<h4 align-items='center'>
-Extension
-</h4>
-~ Add a configurable difficulty level: In this game a user is able to choose from 3 difficulty levels, easy, medium, or hard. The game is defaulted to medium. (Easy level is intended for children)
+<h2 align-items='center'>
+🟠 Extensions
+</h2>
+~Add a configurable difficulty level: In this game a user is able to choose from 3 difficulty levels, easy, medium, or hard. The game is defaulted to medium. (Easy level is intended for children)
 
 ~ There is a backup number generator included for times where the api may fail
 
 ~ This game also includes a little celebration when the user guesses the combination right, and lets the user down easy if they don't.
 
-Tech stack
-Material UI
-React
-Toastify
+Tech stack, Material UI, React, Toastify
 
 Axios is used to call the random.org api.
 
