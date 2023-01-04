@@ -37,7 +37,7 @@ This is an image of the initial rough draft
 <img src="public/img/First-Iteration.jpeg" alt="there was supposed to be an impressive image here" width="300"/>
 <div>
 <br />
-After much testing on the the algorithm used and the functionality, I decided to take it a step further and implement react-dnd drag and drop functionality to receive user input.
+After testing the game and it's functionality, I decided to take it further and implement react-dnd drag and drop functionality to receive user input.
 <br />
 <div align-items='center'>
 <img src="public/img/Fiora-Mastermind-Game.jpeg" alt="there was supposed to be another impressive image here" width="300"/>

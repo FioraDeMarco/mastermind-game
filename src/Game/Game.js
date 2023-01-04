@@ -41,6 +41,7 @@ function Game({ isStarted, ...numberOfInputs }) {
     setWinOpen(false);
     setLoseOpen(false);
     setMessageOn(false);
+    setGuessCount(1);
     setDroppedItems([]);
     setFeedback([]);
     getPegs();
@@ -103,7 +104,7 @@ function Game({ isStarted, ...numberOfInputs }) {
       setDroppedItems([...droppedItems, newItem]);
     }
   }
-
+  console.log("radomFruit", randomFruit);
   return (
     <div className='game'>
       <>

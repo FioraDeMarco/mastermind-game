@@ -17,7 +17,6 @@ export const WonGame = ({ closeWin, handleNewGame }) => {
           color='success'
           onClick={handleNewGame}
           id='new-game'
-          onClick={handleNewGame}
         >
           Play Again! ⏯
         </Button>

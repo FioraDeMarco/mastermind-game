@@ -3,13 +3,22 @@ import { info } from "../Components/Toastify";
 // function to check correctness of user guess input
 
 export const checkUserInputs = (randomFruit, droppedItems) => {
+  console.log(
+    "randomfrut checkinput",
+    randomFruit,
+    "droppedItemsUinpu",
+    droppedItems
+  );
   let correctLocation = 0;
   let correctValue = 0;
 
   let randomFruitCopy = randomFruit.slice();
   let droppedItemsCopy = droppedItems.slice();
+  console.log("randomFruitCopy", randomFruitCopy);
+  console.log("droppedItemsCopy", droppedItemsCopy);
 
   randomFruitCopy.forEach((fruit, i) => {
+    console.log("fruiiiitssss", randomFruitCopy[i]);
     if (droppedItemsCopy[i] === fruit) {
       correctLocation++;
       correctValue++;
@@ -17,15 +26,15 @@ export const checkUserInputs = (randomFruit, droppedItems) => {
     }
   });
 
-  droppedItemsCopy.forEach((input) => {
+  droppedItemsCopy.forEach((input, i) => {
+    console.log("droppedItemsCopy", droppedItemsCopy[i]);
     if (input === null) return;
     let foundIdx = randomFruitCopy.indexOf(input);
     if (foundIdx > -1) {
       correctValue++;
-      randomFruitCopy[foundIdx] = null;
     }
   });
-
+  console.log("correctval", correctValue, "correctLocation", correctLocation);
   return { correctValue, correctLocation };
 };
 
