@@ -1,4 +1,4 @@
-.learn {
+/* .learn {
   background-color: #b51963;
   display: grid;
   place-items: center;
@@ -45,8 +45,7 @@
 }
 
 .all {
-  /* background-image: url("https://png.pngtree.com/thumb_back/fh260/background/20210624/pngtree-children-cartoon-fruit-seamless-background-image_732140.jpg");
-  background-repeat: no-repeat; */
+
   background-color: #e56db1;
   min-height: 100%;
   min-width: 100%;
@@ -94,4 +93,4 @@ button {
 }
 button:hover {
   background-color: #0073e6;
-}
+} */

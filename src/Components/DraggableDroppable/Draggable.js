@@ -8,7 +8,7 @@ function Draggable({ id, children }) {
   });
 
   return (
-    <div ref={setNodeRef} {...listeners} {...attributes}>
+    <div ref={setNodeRef} {...listeners} {...attributes} className='drag-item'>
       {children}
     </div>
   );

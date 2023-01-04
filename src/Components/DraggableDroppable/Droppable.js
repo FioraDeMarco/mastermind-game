@@ -7,7 +7,7 @@ function Droppable({ children, ...props }) {
   });
 
   return (
-    <div className='zone' ref={setNodeRef} {...props}>
+    <div className='drop' ref={setNodeRef} {...props}>
       {children}
     </div>
   );

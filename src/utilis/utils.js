@@ -1,11 +1,13 @@
 import Toastify, { NAN, info } from "../Components/Toastify";
 
-export const checkIputs = (randomData, inputValues) => {
+// function to check correctness of guesses
+
+export const checkUserInputs = (randomFruit, droppedItems) => {
   let correctLocation = 0;
   let correctValue = 0;
 
-  let randomFruitCopy = randomData.slice();
-  let droppedItemsCopy = inputValues.slice();
+  let randomFruitCopy = randomFruit.slice();
+  let droppedItemsCopy = droppedItems.slice();
 
   randomFruitCopy.forEach((fruit, i) => {
     if (droppedItemsCopy[i] === fruit) {
@@ -27,23 +29,36 @@ export const checkIputs = (randomData, inputValues) => {
   return { correctValue, correctLocation };
 };
 
+export const getFeedbackForUserGuess = (
+  correctValue,
+  correctLocation,
+  numberOfInputs
+) => {
+  if (correctLocation === numberOfInputs && correctValue === numberOfInputs) {
+    return true;
+  }
+  return false;
+};
+
+export const updateUserFeedback = (correctLocation, correctValue) => {
+  if (correctLocation === 0 && correctValue === 0) {
+    return "All Incorrect";
+  } else {
+    return `You have ${correctValue} correct fruit${
+      correctValue !== 1 ? "s" : ""
+    } and ${correctLocation} correct location${
+      correctLocation !== 1 ? "s" : ""
+    } `;
+  }
+};
+
+export const checkLoseCondition = (guessCount) => {
+  if (guessCount > 9) {
+    return true;
+  }
+  return false;
+};
+
 export const handleHelpClick = () => {
   info();
 };
-
-// export const handleNewGame = (e, setWin, setWinOpen,setLoseOpen) => {
-//   e.preventDefault();
-//   setWin(false);
-//   setWinOpen(false);
-//   setLoseOpen(false);
-//   setMessageOn(false);
-//   setRandomNumAndFruits(number);
-
-//   // setRandomNumber(tempRandomNumber);
-//   // setRandomFruit(tempFruit);
-//   setDroppedItems([]);
-//   setUserGuesses([]);
-//   setUserGuess([]);
-//   setGuessCount(1);
-//   setFeedback([]);
-// };

@@ -5,8 +5,7 @@ const Item = forwardRef(({ children, ...props }, ref) => {
   props.className = props.className ? props.className + "item" : "item";
 
   return (
-    // <div ref={ref} className='guess zone'>
-    <div ref={ref} id='guess'>
+    <div ref={ref} className='peg'>
       <div {...props}>{children}</div>
     </div>
   );

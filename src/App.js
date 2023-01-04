@@ -1,30 +1,13 @@
-import "./App.css";
+//import "./App.css";
 import React, { useState } from "react";
 import Game from "./Game/Game";
 import Toastify, { info } from "./Components/Toastify";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-// import { createTheme } from "@mui/material/styles";
-
-// const theme = createTheme({
-//   palette: {
-//     primary: {
-//       light: "#757ce8",
-//       main: "#3f50b5",
-//       dark: "#002884",
-//       contrastText: "#fff",
-//     },
-//     secondary: {
-//       light: "#ff7961",
-//       main: "#f44336",
-//       dark: "#ba000d",
-//       contrastText: "#000",
-//     },
-//   },
-// });
+import { ButtonGroup, Grid, Box } from "@mui/material";
 
 function App() {
-  const HARD_MODE_INPUTS = 7;
+  const HARD_MODE_INPUTS = 5;
   const MEDIUM_MODE_INPUTS = 4;
   const EASY_MODE_INPUTS = 3;
 
@@ -40,70 +23,116 @@ function App() {
   };
 
   return (
-    <div className='all'>
-      <header className='App-header'>
-        <h1>Mastermind Game</h1>
-      </header>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       {isStarted ? (
         <Game numberOfInputs={numberOfInputs} isStarted={isStarted} />
       ) : (
         <>
-          <div className='display'>
-            <section className='learn'>
-              <div className='dropdown'>
-                <Toastify />
-                <Button
-                  variant='contained'
-                  color='primary'
-                  id='help'
-                  onClick={handleHelpClick}
-                >
-                  Help
-                </Button>
-              </div>
+          <Box
+            sx={{
+              padding: "10rem",
+              boxShadow: "0 8px 8px 0 grey",
+              backgroundColor: "pink",
+              width: "100%",
+            }}
+          >
+            <Grid
+              container
+              display='flex'
+              direction='column'
+              alignItems='center'
+              justify='flex-start'
+              minWidth='0rem'
+            >
+              <Typography variant='h2'>Mastermind Game</Typography>
 
-              <div>
-                <h2>Difficulty</h2>
-                <Button
-                  variant='contained'
-                  sx={{ borderRadius: 50 }}
-                  color='success'
-                  onClick={() => setNumberOfInputs(HARD_MODE_INPUTS)}
+              <Typography variant='h5' marginTop='3em'>
+                Difficulty
+              </Typography>
+              <Grid
+                container
+                xs={12}
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Grid
+                  container
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    gap: "1rem",
+                  }}
                 >
-                  Hard
-                </Button>
-                <Button
-                  variant='contained'
-                  sx={{ borderRadius: 50 }}
-                  color='success'
-                  onClick={() => setNumberOfInputs(MEDIUM_MODE_INPUTS)}
-                >
-                  Medium
-                </Button>
-                <Button
-                  variant='contained'
-                  sx={{ borderRadius: 50 }}
-                  color='success'
-                  onClick={() => setNumberOfInputs(EASY_MODE_INPUTS)}
-                >
-                  Easy
-                </Button>
-              </div>
+                  <ButtonGroup size='large' aria-label='large button group'>
+                    <Button
+                      variant='contained'
+                      color='primary'
+                      onClick={() => setNumberOfInputs(HARD_MODE_INPUTS)}
+                      sx={{ width: "100%", margin: "1rem 0", gap: "5px" }}
+                    >
+                      Hard
+                    </Button>
+                    <Button
+                      variant='contained'
+                      color='primary'
+                      onClick={() => setNumberOfInputs(MEDIUM_MODE_INPUTS)}
+                      sx={{ width: "100%", margin: "1rem 0", gap: "5px" }}
+                    >
+                      Medium
+                    </Button>
+                    <Button
+                      variant='contained'
+                      color='primary'
+                      onClick={() => setNumberOfInputs(EASY_MODE_INPUTS)}
+                      sx={{ width: "100%", margin: "1rem 0", gap: "1rem" }}
+                    >
+                      Easy
+                    </Button>
+                  </ButtonGroup>
+                </Grid>
 
-              <div className='dropdown'>
-                <Button
-                  variant='contained'
-                  sx={{ borderRadius: 50 }}
-                  color='success'
-                  size='large'
-                  id='play-game'
-                  onClick={handleStartGame}
+                <Grid
+                  container
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    gap: "1rem",
+                    paddingTop: "5rem",
+                  }}
                 >
-                  Play!
-                </Button>
-              </div>
-            </section>
-          </div>
+                  <Button
+                    variant='contained'
+                    color='success'
+                    size='large'
+                    id='play-game'
+                    onClick={handleStartGame}
+                  >
+                    Play!
+                  </Button>
+                  <Toastify />
+                  <Button
+                    variant='contained'
+                    color='secondary'
+                    sx={{ color: "#ffffff" }}
+                    onClick={handleHelpClick}
+                  >
+                    Help
+                  </Button>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Box>
         </>
       )}
     </div>

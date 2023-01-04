@@ -13,7 +13,7 @@ function MultipleDroppable({ numberOfInputs, children, ...props }) {
   });
 
   return (
-    <section className='drop zone' {...props} ref={setNodeRef}>
+    <section className='multiple' {...props} ref={setNodeRef}>
       {droppables.map((id, i) => (
         <Droppable id={id} key={id}>
           {children[i]}
