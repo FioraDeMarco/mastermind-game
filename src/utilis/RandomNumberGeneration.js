@@ -1,6 +1,7 @@
 import axios from "axios";
 
-export const generateRandomPegs = (pegs, numberOfInputs) => {
+export async function generateRandomPegs(pegs, numberOfInputs) {
+  console.log("numberO", numberOfInputs);
   let min = 0;
   let max = 7;
   let col = 1;
@@ -8,8 +9,7 @@ export const generateRandomPegs = (pegs, numberOfInputs) => {
   let format = "plain";
   let rnd = "new";
   console.log("HELLO WORLD");
-
-  axios
+  await axios
     .get(
       `https://www.random.org/integers/?num=${numberOfInputs}&min=${min}&max=${max}&col=${col}&base=${base}&format=${format}&rnd=${rnd}`
     )
@@ -17,20 +17,31 @@ export const generateRandomPegs = (pegs, numberOfInputs) => {
       let winningCombo = extractNums(response);
       console.log("response", response);
       let pegsForwinningCombo = getPegsForWinningCombo(pegs, winningCombo);
-
+      console.log("PEGS4WIN", pegsForwinningCombo);
       return pegsForwinningCombo;
     })
     .catch((err) => {
-      // Random.org has a rate limiter on their RNG endpoint. If we break the limit during testing and
-      // our IP gets banned, fall back to generating the RNG locally
-      console.log(
-        "Error generating number using RNG API. Falling back to local generator.",
-        err
-      );
-      handleNewNumbers(pegs, numberOfInputs);
+      console.log("api error", err);
     });
-  console.log("no infinite");
-};
+  try {
+    const response = await axios.get(
+      `https://www.random.org/integers/?num=${numberOfInputs}&min=${min}&max=${max}&col=${col}&base=${base}&format=${format}&rnd=${rnd}`
+    );
+    let winningCombo = extractNums(response);
+    console.log("response", response);
+    let pegsForwinningCombo = getPegsForWinningCombo(pegs, winningCombo);
+    console.log("PEGS4WIN", pegsForwinningCombo);
+    return pegsForwinningCombo;
+  } catch (err) {
+    // Random.org has a rate limiter on their RNG endpoint. If we break the limit during testing and
+    // our IP gets banned, fall back to generating the RNG locally
+    console.log(
+      "Error generating number using RNG API. Falling back to local generator.",
+      err
+    );
+    handleNewNumbers(pegs, numberOfInputs);
+  }
+}
 
 //Back up random number generator
 const handleNewNumbers = (pegs, numberOfInputs) => {
@@ -51,6 +62,7 @@ const handleNewNumbers = (pegs, numberOfInputs) => {
 };
 
 function extractNums(response) {
+  console.log("I am the extract numsfunction");
   const { data } = response;
   // Data is returned as a string with new lines, so split on the new lines
   // and remove the last new line to get the numbers, and then convert them into integers.
@@ -61,6 +73,7 @@ function extractNums(response) {
 }
 
 function getPegsForWinningCombo(pegs, winningCombo) {
+  console.log("I am the get pegs for win function");
   let fruits = [];
   winningCombo.map(function (num) {
     let fruit = pegs[num];

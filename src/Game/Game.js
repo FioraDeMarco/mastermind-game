@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { LostGame } from "../Components/LostGame/LostGame";
-import Feedback from "../Components/Feedback/Feedback";
 import { WonGame } from "../Components/WonGame/WonGame";
 import "./Game.css";
 import Toastify, { NAN } from "../Components/Toastify";
@@ -15,7 +14,7 @@ import {
   updateUserFeedback,
   checkUserInputs,
   handleHelpClick,
-  getFeedbackForUserGuess,
+  checkWinCondition,
 } from "../utilis/utils";
 import { generateRandomPegs } from "../utilis/RandomNumberGeneration";
 import axios from "axios";
@@ -38,12 +37,8 @@ function Game({ isStarted, ...numberOfInputs }) {
     setWinOpen(false);
     setLoseOpen(false);
     setMessageOn(false);
-    setRandomNumAndFruits(pegs, numberOfInputs);
-
     setDroppedItems([]);
-    setUserGuesses([]);
-    setGuessCount(1);
-    setFeedback([]);
+    getPegs();
   };
 
   const handleNewGame = (e) => {
@@ -52,9 +47,14 @@ function Game({ isStarted, ...numberOfInputs }) {
   };
 
   useEffect(() => {
-    // call api or anything
     setStateForNewGame();
   }, []);
+
+  const getPegs = async () => {
+    const randomPegs = await generateRandomPegs(pegs, numberOfInputs);
+    console.log("pegsResponse", randomPegs);
+    setRandomFruit(randomPegs);
+  };
 
   const validate = () => {
     return droppedItems.length !== numberOfInputs;
@@ -63,61 +63,28 @@ function Game({ isStarted, ...numberOfInputs }) {
   //TODO: Rename to `pegs`
   const pegs = ["🍎", "🍌", "🍊", "🍇", "🍓", "🍍", "🥥", "🥝"];
 
-  const setRandomNumAndFruits = (pegs, numberOfInputs) => {
-    // Make API CALL
-
-    let randomPegs = generateRandomPegs(pegs, numberOfInputs);
-    console.log("randomPegs", randomPegs);
-    setRandomFruit(randomPegs);
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setUserGuesses([...userGuesses, droppedItems]);
-    setFeedback([...feedback, message]);
-    setGuessCount(guessCount + 1);
 
     const { correctValue, correctLocation } = checkUserInputs(
       randomFruit,
       droppedItems
     );
 
+    setMessage(updateUserFeedback(correctValue, correctLocation));
+
+    setFeedback([...feedback, message]);
+
+    setGuessCount(guessCount + 1);
+
     setWinOpen(
-      getFeedbackForUserGuess(randomFruit, droppedItems, numberOfInputs)
+      checkWinCondition(correctValue, correctLocation, numberOfInputs)
     );
-    setMessage(updateUserFeedback(correctLocation, correctValue));
+
     setLoseOpen(checkLoseCondition(guessCount));
-
-    // // // Refactor out to checkGuessCorrectness()
-    // if (correctLocation === numberOfInputs && correctValue === numberOfInputs) {
-    //   setWinOpen(true);
-    //   setGuessHistory([...guessHistory, userGuesses]);
-    //   console.log("win guess history", guessHistory);
-    // }
-
-    // // Refactor out to updateUserFeedback()
-    // if (correctLocation === 0 && correctValue === 0) {
-    //   setMessage("All Incorrect");
-    // } else {
-    //   setMessage(
-    //     `You have ${correctValue} correct fruit${
-    //       correctValue !== 1 ? "s" : ""
-    //     } and ${correctLocation} correct location${
-    //       correctLocation !== 1 ? "s" : ""
-    //     } `
-    //   );
-    // }
-
-    // // Refactor out to checkLoseCondition()
-    // if (guessCount > 9) {
-    //   setLoseOpen(true);
-    //   setGuessHistory([...guessHistory, userGuesses]);
-    //   console.log("loose guess history", guessHistory);
-    // }
-
-    // setDroppedItems([]);
-    // setUserGuess([]);
-    // setMessageOn(true);
+    setDroppedItems([]);
+    handleNewGame();
   };
 
   function handleDragStart(event) {
@@ -135,7 +102,7 @@ function Game({ isStarted, ...numberOfInputs }) {
   }
 
   // TODO: Remember to remove
-  console.log("randomFruit", randomFruit);
+  console.log("randomFruit!!!!!!!!!", randomFruit);
   console.log("droppedItems", droppedItems, typeof droppedItems);
 
   return (

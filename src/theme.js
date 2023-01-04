@@ -15,26 +15,6 @@ export const theme = createTheme({
       contrastText: "#000",
     },
   },
-  components: {
-    // MuiButton: {
-    //   styleOverrides: {
-    //     root: { borderRadius: 50, textTransform: "none" },
-    //     containedPrimary: {
-    //       backgroundColor: "#f44336",
-    //       boxShadow: "1px 1px grey",
-    //       color: "#ff76961",
-    //       "&:hover": {
-    //         backgroundColor: "#002884",
-    //         color: "#ff76961",
-    //       },
-    //       "&:active": {
-    //         backgroundColor: "#002884",
-    //         color: "#ff76961",
-    //       },
-    //     },
-    //   },
-    // },
-  },
 });
 
 export default theme;

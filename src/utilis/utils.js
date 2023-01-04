@@ -29,7 +29,7 @@ export const checkUserInputs = (randomFruit, droppedItems) => {
   return { correctValue, correctLocation };
 };
 
-export const getFeedbackForUserGuess = (
+export const checkWinCondition = (
   correctValue,
   correctLocation,
   numberOfInputs
