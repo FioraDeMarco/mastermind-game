@@ -58,9 +58,7 @@ function Game({ isStarted, ...numberOfInputs }) {
 
   const getPegs = async () => {
     let randomPegs = await generateRandomPegs(pegs, numberOfInputs);
-    if (!randomPegs) {
-      randomPegs = handleNewNumbers(pegs, numberOfInputs);
-    }
+
     setRandomFruit(randomPegs);
   };
 
@@ -133,19 +131,7 @@ function Game({ isStarted, ...numberOfInputs }) {
                       New Game ⏯{" "}
                     </Button>
                   </div>
-                  <form onSubmit={handleSubmit}>
-                    <label>
-                      <Button
-                        variant='contained'
-                        sx={{ borderRadius: 50 }}
-                        color='secondary'
-                        onClick={handleSubmit}
-                        disabled={validate()}
-                      >
-                        ✅
-                      </Button>
-                    </label>
-                  </form>
+
                   <Button
                     variant='contained'
                     sx={{ borderRadius: 50 }}
@@ -193,11 +179,25 @@ function Game({ isStarted, ...numberOfInputs }) {
             </DndContext>
           </div>
 
-          <section>
-            <div id='message'>
-              <h4>{messageOn ? `${message}` : ""}</h4>
-            </div>
-          </section>
+          <div className='check-and-submit'>
+            <form onSubmit={handleSubmit}>
+              <label>
+                <Button
+                  variant='contained'
+                  sx={{ borderRadius: 50 }}
+                  color='secondary'
+                  onClick={handleSubmit}
+                  size='large'
+                  disabled={validate()}
+                >
+                  Check Guess ✅
+                </Button>
+                <div id='message'>
+                  <h4>{messageOn ? `${message}` : ""}</h4>
+                </div>
+              </label>
+            </form>
+          </div>
 
           <section className='feedback'>
             <h2>Previous Guesses</h2>

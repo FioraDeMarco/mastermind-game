@@ -20,6 +20,7 @@ export const checkUserInputs = (randomFruit, droppedItems) => {
   droppedItemsCopy.forEach((input, i) => {
     if (input === null) return;
     let foundIdx = randomFruitCopy.indexOf(input);
+    // let foundIdx = randomFruitCopy[input[i]];
     if (foundIdx > -1) {
       correctValue++;
       randomFruitCopy[foundIdx] = null;

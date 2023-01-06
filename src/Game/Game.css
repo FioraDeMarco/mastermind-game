@@ -43,7 +43,7 @@ body {
   background: #774360;
   width: 100%;
   height: 15em;
-  margin-top: 2em;
+  margin-top: 1em;
   padding: 2em;
   font-size: 2em;
   order: 3;
@@ -65,4 +65,9 @@ body {
 
 .h2 {
   position: relative;
+}
+.check-and-submit {
+  display: flex;
+  text-align: center;
+  padding-top: 1em;
 }
