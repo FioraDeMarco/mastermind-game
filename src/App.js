@@ -1,4 +1,3 @@
-//import "./App.css";
 import React, { useState } from "react";
 import Game from "./Game/Game";
 import Toastify, { info } from "./Components/Toastify";

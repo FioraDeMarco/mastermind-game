@@ -16,10 +16,8 @@ import {
   handleHelpClick,
   checkWinCondition,
 } from "../utilis/utils";
-import {
-  generateRandomPegs,
-  handleNewNumbers,
-} from "../utilis/RandomNumberGeneration";
+import { generateRandomPegs } from "../utilis/RandomNumberGeneration";
+import { Typography } from "@mui/material";
 
 function Game({ isStarted, ...numberOfInputs }) {
   numberOfInputs = Number(Object.values(numberOfInputs));
@@ -34,6 +32,7 @@ function Game({ isStarted, ...numberOfInputs }) {
   const [activeId, setActiveId] = useState(null);
   const [droppedItems, setDroppedItems] = useState([]);
   const [randomFruit, setRandomFruit] = useState([]);
+  const [open, setOpen] = useState(false);
 
   const pegs = ["🍎", "🍌", "🍊", "🍇", "🍓", "🍍", "🥥", "🥝"];
 
@@ -178,7 +177,6 @@ function Game({ isStarted, ...numberOfInputs }) {
               </DragOverlay>
             </DndContext>
           </div>
-
           <div className='check-and-submit'>
             <form onSubmit={handleSubmit}>
               <label>
@@ -189,8 +187,9 @@ function Game({ isStarted, ...numberOfInputs }) {
                   onClick={handleSubmit}
                   size='large'
                   disabled={validate()}
+                  text-size='50'
                 >
-                  Check Guess ✅
+                  <Typography variant='h5'>Check Guess ✅</Typography>
                 </Button>
                 <div id='message'>
                   <h4>{messageOn ? `${message}` : ""}</h4>
@@ -198,7 +197,6 @@ function Game({ isStarted, ...numberOfInputs }) {
               </label>
             </form>
           </div>
-
           <section className='feedback'>
             <h2>Previous Guesses</h2>
             {feedback.length
@@ -223,7 +221,6 @@ function Game({ isStarted, ...numberOfInputs }) {
                 })
               : ""}
           </section>
-
           {winOpen ? (
             <WonGame
               text='hello'

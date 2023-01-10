@@ -9,10 +9,9 @@ export async function generateRandomPegs(pegs, numberOfInputs) {
   let rnd = "new";
 
   try {
-    const response = await axios
-      .get
-      // `https://www.random.org/integers/?num=${numberOfInputs}&min=${min}&max=${max}&col=${col}&base=${base}&format=${format}&rnd=${rnd}`
-      ();
+    const response = await axios.get(
+      `https://www.random.org/integers/?num=${numberOfInputs}&min=${min}&max=${max}&col=${col}&base=${base}&format=${format}&rnd=${rnd}`
+    );
     let winningCombo = extractNums(response);
     let pegsForwinningCombo = getPegsForWinningCombo(pegs, winningCombo);
     return pegsForwinningCombo;
