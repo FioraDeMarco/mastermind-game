@@ -43,6 +43,7 @@ function Game({ isStarted, ...numberOfInputs }) {
     setGuessCount(1);
     setDroppedItems([]);
     setFeedback([]);
+    setUserGuesses([])
     getPegs();
   };
 
