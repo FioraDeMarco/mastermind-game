@@ -101,7 +101,7 @@ function Game({ isStarted, ...numberOfInputs }) {
       setDroppedItems([...droppedItems, newItem]);
     }
   }
-
+console.log('random fruit', randomFruit)
   return (
     <div className='game'>
       <>

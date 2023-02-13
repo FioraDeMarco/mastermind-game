@@ -1,9 +1,11 @@
 body {
   background-color: #b51963 !important;
+  display: flex;
 }
 
 .game {
   width: 850px;
+  /* max-width: 100%; */
 }
 
 .game-container-1 {
@@ -17,6 +19,7 @@ body {
 
 .drag-and-drop {
   width: 100%;
+   /* max-width: 100%; */
 }
 
 .three {

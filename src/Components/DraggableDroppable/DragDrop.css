@@ -9,6 +9,9 @@
   display: flex;
   gap: 5px;
   min-width: 850px;
+  /* min-width: 70%;
+  max-width:  100%; */
+  
 }
 
 .drop {
